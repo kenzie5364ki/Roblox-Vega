@@ -386,10 +386,6 @@ return function(Config)
 		return TabModule:New(TabConfig.Title, TabConfig.Icon, Window.TabHolder)
 	end
 
-	function Window:CreateTab(TabConfig)
-		return TabModule:New(TabConfig.Title, TabConfig.Icon, Window.TabHolder)
-	end
-
 	function Window:SelectTab(Tab)
 		TabModule:SelectTab(1)
 	end
