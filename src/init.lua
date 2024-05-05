@@ -112,7 +112,7 @@ function Library:SafeCallback(Function, ...)
 	end
 end
 
-function Library:Round(Number, Factor)
+function Library.Utilities:Round(Number, Factor)
 	if Factor == 0 then
 		return math.floor(Number)
 	end
@@ -120,7 +120,7 @@ function Library:Round(Number, Factor)
 	return Number:find("%.") and tonumber(Number:sub(1, Number:find("%.") + Factor)) or Number
 end
 
-function Library:GetIcon(Name)
+function Library.Utilities:GetIcon(Name)
 	return Name ~= "SetIcon" and Icons[Name] or nil
 end
 
@@ -130,8 +130,8 @@ Elements.__namecall = function(Table, Key, ...)
 	return Elements[Key](...)
 end
 
-for _, ElementComponent in ipairs(ElementsTable) do
-	Elements["Add" .. ElementComponent.__type] = function(self, Idx, Config)
+for _, ElementComponent in next, ElementsTable do
+	Elements["Add"..ElementComponent.__type] = function(self, Idx, Config)
 		ElementComponent.Container = self.Container
 		ElementComponent.Type = self.Type
 		ElementComponent.ScrollFrame = self.ScrollFrame
@@ -139,6 +139,8 @@ for _, ElementComponent in ipairs(ElementsTable) do
 
 		return ElementComponent:New(Idx, Config)
 	end
+
+	Elements["Create"..ElementComponent.__type] = Elements["Add"..ElementComponent.__type]
 end
 
 Library.Elements = Elements
@@ -147,8 +149,7 @@ function Library:CreateWindow(Config)
 	assert(Config.Title, "Window - Missing Title")
 
 	if Library.Window then
-		print("You cannot create more than one window.")
-		return
+		return "You cannot create more than one window."
 	end
 
 	Library.MinimizeKey = Config.MinimizeKey or Enum.KeyCode.LeftControl
@@ -171,6 +172,10 @@ function Library:CreateWindow(Config)
 	Library:SetTheme(Config.Theme)
 
 	return Window
+end
+
+function Library:AddWindow(Config)
+	return Library:CreateWindow(Config)
 end
 
 function Library:SetTheme(Value)
@@ -202,29 +207,41 @@ function Library:Destroy()
 			end
 		end
 
-		local info = TweenInfo.new(2 / 3, Enum.EasingStyle.Quint)
+		local info, tweenProps, doTween = TweenInfo.new(2 / 3, Enum.EasingStyle.Quint)
+
+		local function IsA(obj, class)
+			local isClass = obj:IsA(class)
+
+			if isClass then
+				doTween = true
+			end
+
+			return isClass
+		end
 
 		for i,v in next, Library.GUI:GetDescendants() do
-			local tweenProps, doTween = {}, false
-			if v:IsA("GuiObject") then
+			tweenProps, doTween = {}, false
+
+			if IsA(v, "GuiObject") then
 				doTween = true
 
 				tweenProps.BackgroundTransparency = 1
 			end
-			if v:IsA("TextLabel") then
-				doTween = true
 
+			if IsA(v, "ScrollingFrame") then
+				tweenProps.ScrollBarImageTransparency = 1		
+			end
+
+			if IsA(v, "TextLabel") or IsA(v, "TextBox") then
 				tweenProps.TextStrokeTransparency = 1
 				tweenProps.TextTransparency = 1
 			end
-			if v:IsA("UIStroke") then
-				doTween = true
 
+			if IsA(v, "UIStroke") then
 				tweenProps.Transparency = 1
 			end
-			if v.ClassName:find("Image") then
-				doTween = true
 
+			if IsA(v, "ImageLabel") or IsA(v, "ImageButton") then
 				tweenProps.ImageTransparency = 1
 			end
 

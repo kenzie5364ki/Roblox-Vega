@@ -329,7 +329,7 @@ function Element:New(Idx, Config)
 				TransparencyColor.BackgroundColor3 = Color3.fromHSV(Hue, Sat, Vib)
 				DialogDisplayFrame.BackgroundTransparency = Transparency
 				TransparencyDrag.Position = UDim2.new(0, -1, 1 - Transparency, -6)
-				AlphaInput.Input.Text = require(Root):Round((1 - Transparency) * 100, 0) .. "%"
+				AlphaInput.Input.Text = Library.Utilities:Round((1 - Transparency) * 100, 0) .. "%"
 			end
 		end
 

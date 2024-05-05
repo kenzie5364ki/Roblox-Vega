@@ -41,7 +41,7 @@ function TabModule:New(Title, Icon, Parent)
 		Type = "Tab",
 	}
 
-	Icon = Library:GetIcon(Icon)
+	Icon = Library.Utilities:GetIcon(Icon)
 
 	Tab.Frame = New("TextButton", {
 		Size = UDim2.new(1, 0, 0, 34),

@@ -22,7 +22,7 @@ local SuccessfullyRead, Module = pcall(fs.readFile, "Distribution/Fluent.rbxm")
 if SuccessfullyRead then
 	local ModuleCodegen = BuildCodegen(Module, false)
 
-	fs.writeFile(FilePath, `{Header}\n\n{minify(ModuleCodegen)}\n`)
+	fs.writeFile(FilePath, `{Header}\n{minify(ModuleCodegen)}`)
 else
 	fs.writeFile(FilePath, `{Header}\n--[[\nCould not read Distribution/Fluent.rbxm, {Module}\n--]]`)
 	error(`--[[\nCould not read Distribution/Fluent.rbxm, {Module}\n--]]`, 1)
