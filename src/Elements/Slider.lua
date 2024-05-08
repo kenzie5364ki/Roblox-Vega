@@ -11,24 +11,20 @@ Element.__type = "Slider"
 
 function Element:New(Idx, Config)
 	local Library = self.Library
-	assert(Config.Title, "Slider - Missing Title.")
-	assert(Config.Default, "Slider - Missing default value.")
-	assert(Config.Min, "Slider - Missing minimum value.")
 	assert(Config.Max, "Slider - Missing maximum value.")
-	assert(Config.Rounding, "Slider - Missing rounding value.")
 
 	local Slider = {
 		Value = nil,
-		Min = Config.Min,
+		Min = Config.Min or 0,
 		Max = Config.Max,
-		Rounding = Config.Rounding,
+		Rounding = Config.Rounding or 0,
 		Callback = Config.Callback or function(Value) end,
 		Type = "Slider",
 	}
 
 	local Dragging = false
 
-	local SliderFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, false)
+	local SliderFrame = require(Components.Element)(Config.Title or "Slider", Config.Description, self.Container, false)
 	SliderFrame.DescLabel.Size = UDim2.new(1, -170, 0, 14)
 
 	Slider.SetTitle = SliderFrame.SetTitle
@@ -138,13 +134,15 @@ function Element:New(Idx, Config)
 	end
 
 	function Slider:SetValue(Value)
+		local OldValue = self.Value or Value
+
 		self.Value = Library.Utilities:Round(math.clamp(Value, Slider.Min, Slider.Max), Slider.Rounding)
 		SliderDot.Position = UDim2.new((self.Value - Slider.Min) / (Slider.Max - Slider.Min), -7, 0.5, 0)
 		SliderFill.Size = UDim2.fromScale((self.Value - Slider.Min) / (Slider.Max - Slider.Min), 1)
 		SliderDisplay.Text = tostring(self.Value)
 
-		Library:SafeCallback(Slider.Callback, self.Value)
-		Library:SafeCallback(Slider.Changed, self.Value)
+		Library:SafeCallback(Slider.Callback, self.Value, OldValue)
+		Library:SafeCallback(Slider.Changed, self.Value, OldValue)
 	end
 
 	function Slider:Destroy()
@@ -152,7 +150,7 @@ function Element:New(Idx, Config)
 		Library.Options[Idx] = nil
 	end
 
-	Slider:SetValue(Config.Default)
+	Slider:SetValue(typeof(Config.Default) == "number" and Config.Default or Slider.Min)
 
 	Library.Options[Idx] = Slider
 	return Slider

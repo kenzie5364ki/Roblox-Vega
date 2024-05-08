@@ -6,7 +6,7 @@
         "MainModule": {
           "$path": "src"
         }
-      },
+      }, 
       "StarterPlayer": {
         "StarterPlayerScripts": {
           "Example": {

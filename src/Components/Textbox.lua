@@ -5,8 +5,9 @@ local Creator = require(Root.Creator)
 local New = Creator.New
 
 return function(Parent, Acrylic)
-	Acrylic = Acrylic or false
 	local Textbox = {}
+
+	Acrylic = Acrylic or false
 
 	Textbox.Input = New("TextBox", {
 		FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json"),

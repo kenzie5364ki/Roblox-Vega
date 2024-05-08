@@ -1,7 +1,6 @@
 local Root = script.Parent.Parent
 local Creator = require(Root.Creator)
 
-local New = Creator.New
 local AddSignal = Creator.AddSignal
 local Components = Root.Components
 

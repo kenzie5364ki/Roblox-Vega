@@ -1,5 +1,4 @@
 local UserInputService = game:GetService("UserInputService")
-local TouchInputService = game:GetService("TouchInputService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
@@ -320,7 +319,7 @@ function Element:New(Idx, Config)
 			SatCursor.Position = UDim2.new(Sat, 0, 1 - Vib, 0)
 			DialogDisplayFrame.BackgroundColor3 = Color3.fromHSV(Hue, Sat, Vib)
 
-			HexInput.Input.Text = "#" .. Color3.fromHSV(Hue, Sat, Vib):ToHex()
+			HexInput.Input.Text = `#{Color3.fromHSV(Hue, Sat, Vib):ToHex()}`
 			RedInput.Input.Text = GetRGB()["R"]
 			GreenInput.Input.Text = GetRGB()["G"]
 			BlueInput.Input.Text = GetRGB()["B"]
@@ -329,7 +328,7 @@ function Element:New(Idx, Config)
 				TransparencyColor.BackgroundColor3 = Color3.fromHSV(Hue, Sat, Vib)
 				DialogDisplayFrame.BackgroundTransparency = Transparency
 				TransparencyDrag.Position = UDim2.new(0, -1, 1 - Transparency, -6)
-				AlphaInput.Input.Text = Library.Utilities:Round((1 - Transparency) * 100, 0) .. "%"
+				AlphaInput.Input.Text = `{Library.Utilities:Round((1 - Transparency) * 100, 0)}%`
 			end
 		end
 

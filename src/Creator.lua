@@ -63,8 +63,8 @@ local Creator = {
 			BackgroundColor3 = Color3.new(1, 1, 1),
 			BorderColor3 = Color3.new(0, 0, 0),
 			BorderSizePixel = 0,
-		},
-	},
+		}
+	}
 }
 
 local function ApplyCustomProps(Object, Props)
@@ -74,7 +74,7 @@ local function ApplyCustomProps(Object, Props)
 end
 
 function Creator.AddSignal(Signal, Function)
-	table.insert(Creator.Signals, Signal:Connect(Function))
+	Creator.Signals[#Creator.Signals+1] = Signal:Connect(Function)
 end
 
 function Creator.Disconnect()

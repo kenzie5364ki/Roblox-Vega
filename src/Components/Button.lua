@@ -6,8 +6,9 @@ local New = Creator.New
 local Spring = Flipper.Spring.new
 
 return function(Theme, Parent, DialogCheck)
-	DialogCheck = DialogCheck or false
 	local Button = {}
+
+	DialogCheck = DialogCheck or false
 
 	Button.Title = New("TextLabel", {
 		FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json"),

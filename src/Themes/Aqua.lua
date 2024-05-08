@@ -43,5 +43,5 @@ return {
 	Text = Color3.fromRGB(240, 240, 240),
 	SubText = Color3.fromRGB(170, 170, 170),
 	Hover = Color3.fromRGB(110, 160, 160),
-	HoverChange = 0.04,
+	HoverChange = 0.04
 }

@@ -27,14 +27,15 @@ function Notification:Init(GUI)
 end
 
 function Notification:New(Config)
+	local NewNotification = {
+		Closed = false,
+	}
+
 	Config.Title = Config.Title or "Title"
 	Config.Content = Config.Content or "Content"
 	Config.SubContent = Config.SubContent or ""
 	Config.Duration = Config.Duration or nil
 	Config.Buttons = Config.Buttons or {}
-	local NewNotification = {
-		Closed = false,
-	}
 
 	NewNotification.AcrylicPaint = Acrylic.AcrylicPaint()
 

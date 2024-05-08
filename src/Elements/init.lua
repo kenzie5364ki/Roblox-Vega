@@ -1,7 +1,7 @@
 local Elements = {}
 
-for _, Theme in next, script:GetChildren() do
-	table.insert(Elements, require(Theme))
+for _, Element in next, script:GetChildren() do
+	Elements[#Elements+1] = require(Element)
 end
 
 return Elements

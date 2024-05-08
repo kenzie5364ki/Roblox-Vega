@@ -1,14 +1,15 @@
-local Main = require(game:GetService("ReplicatedStorage"):WaitForChild("Fluent"))
+local Main = require(game:GetService("ReplicatedStorage"):WaitForChild("MainModule"))
 
-local Window = Main:CreateWindow({
-    Title = "Fluent " .. Main.Version,
-    SubTitle = "by dawid",
+local Window = Main:CreateWindow{
+    Title = `Fluent {Main.Version}`,
+    SubTitle = "by Actual Master Oogway",
     TabWidth = 160,
     Size = UDim2.fromOffset(830, 525),
-    Resize = true,
-    Acrylic = true,
-    Theme = "Dark"
-})
+    Resize = true, -- Resize this ^ Size according to a 1920x1080 screen, good for mobile users but may look weird on some devices
+    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl -- Used when theres no MinimizeKeybind
+}
 
 local Tabs = {
     Main = Window:AddTab{
@@ -26,6 +27,14 @@ do
         Title = "Paragraph",
         Content = "This is a paragraph.\nSecond line!"
     })
+
+    Tabs.Main:AddParagraph({
+        Title = "Paragraph",
+        Content = "This is a paragraph with a center alignment!",
+        TitleAlignment = "Middle",
+        ContentAlignment = Enum.TextXAlignment.Center
+    })
+
 
     Tabs.Main:AddButton({
         Title = "Button",
@@ -154,6 +163,25 @@ do
             "Transparency:", TColorpicker.Transparency
         )
     end)
+
+    Tabs.Main:CreateButton{
+        Title = "Really Really big Dropdown",
+        Description = "",
+        Callback = function()
+            local Values = {}
+
+            for i = 1, 1750 do
+                Values[i] = i
+            end
+
+            Tabs.Main:AddDropdown("Dropdown", {
+                Title = "Big Dropdown",
+                Values = Values,
+                Multi = false,
+                Default = 1,
+            })
+        end
+    }
 
     task.spawn(function()
         while true do

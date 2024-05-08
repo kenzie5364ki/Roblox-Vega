@@ -12,11 +12,9 @@ Element.__type = "Keybind"
 
 function Element:New(Idx, Config)
 	local Library = self.Library
-	assert(Config.Title, "KeyBind - Missing Title")
-	assert(Config.Default, "KeyBind - Missing default value.")
 
 	local Keybind = {
-		Value = Config.Default,
+		Value = Config.Default or Config.Value or Enum.KeyCode.Unknown,
 		Toggled = false,
 		Mode = Config.Mode or "Toggle",
 		Type = "Keybind",
@@ -26,14 +24,14 @@ function Element:New(Idx, Config)
 
 	local Picking = false
 
-	local KeybindFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, true)
+	local KeybindFrame = require(Components.Element)(Config.Title or "Keybind", Config.Description, self.Container, true)
 
 	Keybind.SetTitle = KeybindFrame.SetTitle
 	Keybind.SetDesc = KeybindFrame.SetDesc
 
 	local KeybindDisplayLabel = New("TextLabel", {
 		FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal),
-		Text = Config.Default,
+		Text = Library.Utilities:Prettify(Keybind.Value),
 		TextColor3 = Color3.fromRGB(240, 240, 240),
 		TextSize = 13,
 		TextXAlignment = Enum.TextXAlignment.Center,
@@ -90,9 +88,9 @@ function Element:New(Idx, Config)
 
 			local Key = Keybind.Value
 
-			if Key == "MouseLeft" or Key == "MouseRight" then
-				return Key == "MouseLeft" and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
-					or Key == "MouseRight"
+			if Key == "LeftMousebutton" or Key == "RightMousebutton" then
+				return Key == "LeftMousebutton" and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
+					or Key == "RightMousebutton"
 						and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
 			else
 				return UserInputService:IsKeyDown(Enum.KeyCode[Keybind.Value])
@@ -106,9 +104,10 @@ function Element:New(Idx, Config)
 		Key = Key or Keybind.Key
 		Mode = Mode or Keybind.Mode
 
-		KeybindDisplayLabel.Text = Key
 		Keybind.Value = Key
 		Keybind.Mode = Mode
+
+		KeybindDisplayLabel.Text = Library.Utilities:Prettify(Keybind.Value)
 	end
 
 	function Keybind:OnClick(Callback)
@@ -140,35 +139,31 @@ function Element:New(Idx, Config)
 
 			wait(0.2)
 
-			local Event
-			Event = UserInputService.InputBegan:Connect(function(Input)
+			UserInputService.InputBegan:Once(function(Input)
 				local Key
 
 				if Input.UserInputType == Enum.UserInputType.Keyboard then
 					Key = Input.KeyCode.Name
 				elseif Input.UserInputType == Enum.UserInputType.MouseButton1 then
-					Key = "MouseLeft"
+					Key = "LeftMousebutton"
 				elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
-					Key = "MouseRight"
+					Key = "RightMousebutton"
 				end
 
-				local EndedEvent
-				EndedEvent = UserInputService.InputEnded:Connect(function(Input)
-					if
-						Input.KeyCode.Name == Key
-						or Key == "MouseLeft" and Input.UserInputType == Enum.UserInputType.MouseButton1
-						or Key == "MouseRight" and Input.UserInputType == Enum.UserInputType.MouseButton2
+				UserInputService.InputEnded:Once(function(Input)
+					if (Input.KeyCode.Name == Key
+						or Key == "LeftMousebutton" and Input.UserInputType == Enum.UserInputType.MouseButton1
+						or Key == "RightMousebutton" and Input.UserInputType == Enum.UserInputType.MouseButton2)
+						and not Library.Unloaded
 					then
 						Picking = false
 
-						KeybindDisplayLabel.Text = Key
 						Keybind.Value = Key
+
+						KeybindDisplayLabel.Text = Library.Utilities:Prettify(Keybind.Value)
 
 						Library:SafeCallback(Keybind.ChangedCallback, Input.KeyCode or Input.UserInputType)
 						Library:SafeCallback(Keybind.Changed, Input.KeyCode or Input.UserInputType)
-
-						Event:Disconnect()
-						EndedEvent:Disconnect()
 					end
 				end)
 			end)
@@ -180,10 +175,10 @@ function Element:New(Idx, Config)
 			if Keybind.Mode == "Toggle" then
 				local Key = Keybind.Value
 
-				if Key == "MouseLeft" or Key == "MouseRight" then
+				if Key == "LeftMousebutton" or Key == "RightMousebutton" then
 					if
-						Key == "MouseLeft" and Input.UserInputType == Enum.UserInputType.MouseButton1
-						or Key == "MouseRight" and Input.UserInputType == Enum.UserInputType.MouseButton2
+						Key == "LeftMousebutton" and Input.UserInputType == Enum.UserInputType.MouseButton1
+						or Key == "RightMousebutton" and Input.UserInputType == Enum.UserInputType.MouseButton2
 					then
 						Keybind.Toggled = not Keybind.Toggled
 						Keybind:DoClick()

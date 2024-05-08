@@ -1,7 +1,6 @@
 local Root = script.Parent.Parent
 local Assets = require(script.Parent.Assets)
 local Creator = require(Root.Creator)
-local Flipper = require(Root.Packages.Flipper)
 
 local New = Creator.New
 local AddSignal = Creator.AddSignal
@@ -136,22 +135,32 @@ return function(Config)
 			Buttons = {
 				{
 					Title = "Yes",
-					Callback = function()
-						Library:Destroy()
-					end,
+					Callback = Library.Destroy,
 				},
 				{
 					Title = "No",
-				},
-			},
+				}
+			}
 		})
 	end)
+
 	TitleBar.MaxButton = BarButton(Assets.Max, UDim2.new(1, -40, 0, 4), TitleBar.Frame, function()
 		Config.Window.Maximize(not Config.Window.Maximized)
 	end)
+
 	TitleBar.MinButton = BarButton(Assets.Min, UDim2.new(1, -80, 0, 4), TitleBar.Frame, function()
 		Library.Window:Minimize()
 	end)
+
+	local SearchButtonIcon = Library.Utilities:GetIcon("search")
+	local SearchButton = BarButton(SearchButtonIcon.Image, UDim2.new(1, -120, 0, 4), TitleBar.Frame, function()
+		print("its in beta, dumbass")
+	end)
+
+	SearchButton.Frame.Icon.ImageRectSize = SearchButtonIcon.ImageRectSize
+	SearchButton.Frame.Icon.ImageRectOffset = SearchButtonIcon.ImageRectOffset
+
+	TitleBar.SearchButton = SearchButtonIcon
 
 	return TitleBar
 end

@@ -1,3 +1,3 @@
-std = "roblox"
+std = "roblox" 
 [lints]
 global_usage = "allow"

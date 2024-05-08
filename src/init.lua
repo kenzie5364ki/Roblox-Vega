@@ -1,10 +1,45 @@
-local Lighting = game:GetService("Lighting")
-local RunService = game:GetService("RunService")
-local LocalPlayer = game:GetService("Players").LocalPlayer
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local Camera = game:GetService("Workspace").CurrentCamera
-local Mouse = LocalPlayer:GetMouse()
+local function Clone(ToClone)
+	local Type = typeof(ToClone)
+
+	if Type == "function" and (clonefunc or clonefunction) then
+		return (clonefunc or clonefunction)(ToClone)
+	elseif Type == "Instance" and (cloneref or clonerefrence) then
+		return (cloneref or clonerefrence)(ToClone)
+	elseif Type == "table" then
+		local function deepcopy(orig, copies)
+			copies = copies or {}
+			local orig_type, copy = type(orig), nil
+
+			if orig_type == 'table' then
+				if copies[orig] then
+					copy = copies[orig]
+				else	
+					copy = {}
+
+					copies[orig] = copy
+
+					for orig_key, orig_value in next, orig, nil do
+						copy[deepcopy(orig_key, copies)] = deepcopy(orig_value, copies)
+					end
+
+					setmetatable(copy, deepcopy((getrawmetatable or getmetatable)(orig), copies))
+				end
+			else
+				copy = orig
+			end
+
+			return copy
+		end
+
+		return deepcopy(ToClone)
+	else
+		return ToClone
+	end
+end
+
+local MarketplaceService = Clone(game:GetService("MarketplaceService"))
+local TweenService = Clone(game:GetService("TweenService"))
+local Camera = Clone(game:GetService("Workspace").CurrentCamera)
 
 local Root = script
 local Components = Root.Components
@@ -17,9 +52,12 @@ local Themes = require(Root.Themes)
 
 local NotificationModule = require(Components.Notification)
 
+local SharedTable = ((typeof(shared) == "table") and shared) or ((typeof(_G) == "table") and _G) or ((typeof(getgenv) == "function" and typeof(getgenv()) == "table") and getgenv())
 local New = Creator.New
 
-local GUI = New("ScreenGui", {})
+local GUI = New("ScreenGui", {
+	Name = "Fluent Renewed Base GUI"
+})
 
 GUI.Parent = (function()
 	local success, result = pcall(function()
@@ -70,8 +108,11 @@ local Library = {
 
 	Window = nil,
 	WindowFrame = nil,
-	Utilities = {},
-	Connections = {},
+	Utilities = {
+		Themes = Themes,
+		Shared = SharedTable
+	},
+	Connections = Creator.Signals,
 	Unloaded = false,
 
 	Theme = "Dark",
@@ -112,16 +153,39 @@ function Library:SafeCallback(Function, ...)
 	end
 end
 
-function Library.Utilities:Round(Number, Factor)
-	if Factor == 0 then
-		return math.floor(Number)
+function Library.Utilities:Truncate(number: number, decimals: number, round: boolean)
+	local shift = 10 ^ (typeof(decimals) == "number" and math.max(decimals, 0) or 0)
+	if round then
+		return math.round(number * shift) // 1 / shift
+	else
+		return number * shift // 1 / shift
 	end
-	Number = tostring(Number)
-	return Number:find("%.") and tonumber(Number:sub(1, Number:find("%.") + Factor)) or Number
 end
 
-function Library.Utilities:GetIcon(Name)
+function Library.Utilities:Round(Number: number, Factor: number)
+	return Library.Utilities:Truncate(Number, Factor, true)
+end
+
+function Library.Utilities:GetIcon(Name: string)
 	return Name ~= "SetIcon" and Icons[Name] or nil
+end
+
+function Library.Utilities:Prettify(ToPrettify: EnumItem | string | number)
+	local Type = typeof(ToPrettify)
+
+	if Type == "EnumItem" then
+		return ToPrettify.Name:gsub("(%l)(%u)", "%1 %2")
+	elseif Type == "string" then
+		return ToPrettify:gsub("(%l)(%u)", "%1 %2")
+	elseif Type == "number" then
+		return Library.Utilities:Round(ToPrettify, 2)
+	else
+		return ToPrettify
+	end
+end
+
+function Library.Utilities:Clone(...)
+	return Clone(...)
 end
 
 local Elements = {}
@@ -131,7 +195,7 @@ Elements.__namecall = function(Table, Key, ...)
 end
 
 for _, ElementComponent in next, ElementsTable do
-	Elements["Add"..ElementComponent.__type] = function(self, Idx, Config)
+	Elements[`Create{ElementComponent.__type}`] = function(self, Idx, Config)
 		ElementComponent.Container = self.Container
 		ElementComponent.Type = self.Type
 		ElementComponent.ScrollFrame = self.ScrollFrame
@@ -140,33 +204,41 @@ for _, ElementComponent in next, ElementsTable do
 		return ElementComponent:New(Idx, Config)
 	end
 
-	Elements["Create"..ElementComponent.__type] = Elements["Add"..ElementComponent.__type]
+	Elements[`Add{ElementComponent.__type}`] = Elements[`Create{ElementComponent.__type}`]
+	Elements[ElementComponent.__type] = Elements[`Create{ElementComponent.__type}`]
 end
 
 Library.Elements = Elements
 
 function Library:CreateWindow(Config)
-	assert(Config.Title, "Window - Missing Title")
-
 	if Library.Window then
 		return "You cannot create more than one window."
+	end
+
+	if not Config.Title then
+		local Success, Game_Name = pcall(MarketplaceService.GetProductInfo, MarketplaceService, game.PlaceId)
+		
+		Config.Title = Success and Game_Name or "Fluent Renewed"
 	end
 
 	Library.MinimizeKey = Config.MinimizeKey or Enum.KeyCode.LeftControl
 	Library.UseAcrylic = Config.Acrylic or false
 	Library.Acrylic = Config.Acrylic or false
 	Library.Theme = Config.Theme or "Dark"
+
 	if Config.Acrylic then
 		Acrylic.init()
 	end
 
-	local Window = require(Components.Window)({
+	local Window = require(Components.Window){
 		Parent = GUI,
 		Size = Config.Resize ~= true and Config.Size or UDim2.fromOffset(Library.Utilities:Resize(Config.Size.X.Offset, Config.Size.Y.Offset)),
 		Title = Config.Title,
 		SubTitle = Config.SubTitle,
 		TabWidth = Config.TabWidth,
-	})
+	}
+
+	GUI.Name = `FluentRenewed_{Config.Title}`
 
 	Library.Window = Window
 	Library:SetTheme(Config.Theme)
@@ -289,8 +361,8 @@ function Library.Utilities:Resize(x, y)
     return CurrentSize.X * X, CurrentSize.Y * Y
 end
 
-if getgenv then
-	getgenv().Fluent = Library
+if SharedTable then
+	SharedTable.FluentRenewed = Library
 end
 
 return Library

@@ -133,6 +133,52 @@ function Element:New(Idx, Config)
 		}),
 	})
 
+	local ButtonSelector_BuildList = New("Frame", {
+		Size = UDim2.fromOffset(4, 14),
+		BackgroundColor3 = Color3.fromRGB(76, 194, 255),
+		Position = UDim2.fromOffset(-1, 16),
+		AnchorPoint = Vector2.new(0, 0.5),
+		ThemeTag = {
+			BackgroundColor3 = "Accent",
+		},
+	}, {
+		New("UICorner", {
+			CornerRadius = UDim.new(0, 2),
+		}),
+	})
+
+	local ButtonLabel_BuildList = New("TextLabel", {
+		FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json"),
+		TextColor3 = Color3.fromRGB(200, 200, 200),
+		TextSize = 13,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundTransparency = 1,
+		Size = UDim2.fromScale(1, 1),
+		Position = UDim2.fromOffset(10, 0),
+		Name = "ButtonLabel",
+		ThemeTag = {
+			TextColor3 = "Text",
+		},
+	})
+
+	local Button_BuildList = New("TextButton", {
+		Size = UDim2.new(1, -5, 0, 32),
+		BackgroundTransparency = 1,
+		ZIndex = 23,
+		Text = "",
+		ThemeTag = {
+			BackgroundColor3 = "DropdownOption",
+		},
+	}, {
+		ButtonSelector_BuildList,
+		ButtonLabel_BuildList,
+		New("UICorner", {
+			CornerRadius = UDim.new(0, 6),
+		}),
+	})
+
 	local DropdownHolderCanvas = New("Frame", {
 		BackgroundTransparency = 1,
 		Size = UDim2.fromOffset(170, 300),
@@ -223,7 +269,7 @@ function Element:New(Idx, Config)
 		if Config.Multi then
 			for Idx, Value in next, Values do
 				if Dropdown.Value[Value] then
-					Str = Str .. Value .. ", "
+					Str = `{Str}{Value}, `
 				end
 			end
 			Str = Str:sub(1, #Str - 2)
@@ -239,7 +285,7 @@ function Element:New(Idx, Config)
 			local T = {}
 
 			for Value, Bool in next, Dropdown.Value do
-				table.insert(T, Value)
+				T[#T + 1] = Value
 			end
 
 			return T
@@ -265,53 +311,11 @@ function Element:New(Idx, Config)
 
 			Count = Count + 1
 
-			local ButtonSelector = New("Frame", {
-				Size = UDim2.fromOffset(4, 14),
-				BackgroundColor3 = Color3.fromRGB(76, 194, 255),
-				Position = UDim2.fromOffset(-1, 16),
-				AnchorPoint = Vector2.new(0, 0.5),
-				ThemeTag = {
-					BackgroundColor3 = "Accent",
-				},
-			}, {
-				New("UICorner", {
-					CornerRadius = UDim.new(0, 2),
-				}),
-			})
+			local Button = Button_BuildList:Clone()
 
-			local ButtonLabel = New("TextLabel", {
-				FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json"),
-				Text = Value,
-				TextColor3 = Color3.fromRGB(200, 200, 200),
-				TextSize = 13,
-				TextXAlignment = Enum.TextXAlignment.Left,
-				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-				AutomaticSize = Enum.AutomaticSize.Y,
-				BackgroundTransparency = 1,
-				Size = UDim2.fromScale(1, 1),
-				Position = UDim2.fromOffset(10, 0),
-				Name = "ButtonLabel",
-				ThemeTag = {
-					TextColor3 = "Text",
-				},
-			})
+			local ButtonSelector = Button.Frame
 
-			local Button = New("TextButton", {
-				Size = UDim2.new(1, -5, 0, 32),
-				BackgroundTransparency = 1,
-				ZIndex = 23,
-				Text = "",
-				Parent = DropdownScrollFrame,
-				ThemeTag = {
-					BackgroundColor3 = "DropdownOption",
-				},
-			}, {
-				ButtonSelector,
-				ButtonLabel,
-				New("UICorner", {
-					CornerRadius = UDim.new(0, 6),
-				}),
-			})
+			local ButtonLabel = Button.ButtonLabel
 
 			local Selected
 
@@ -387,10 +391,17 @@ function Element:New(Idx, Config)
 				end
 			end)
 
+			ButtonLabel.Text = Value
+			Button.Parent = DropdownScrollFrame
+
 			Table:UpdateButton()
 			Dropdown:Display()
 
 			Buttons[Button] = Table
+
+			if Idx % 30 == 0 then
+				task.wait()
+			end
 		end
 
 		ListSizeX = 0

@@ -26,5 +26,5 @@ return {
 	DialogButtonBorder = Color3.fromRGB(55, 55, 55),
 	DialogBorder = Color3.fromRGB(50, 50, 50),
 	DialogInput = Color3.fromRGB(45, 45, 45),
-	DialogInputLine = Color3.fromRGB(120, 120, 120),
+	DialogInputLine = Color3.fromRGB(120, 120, 120)
 }

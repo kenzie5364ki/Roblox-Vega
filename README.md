@@ -1,5 +1,5 @@
-<img src="Assets/logodark.png#gh-dark-mode-only" alt="fluent">
-<img src="Assets/logolight.png#gh-light-mode-only" alt="fluent">
+<img src="Assets/darkmode.png#gh-dark-mode-only" alt="fluent">
+<img src="Assets/lightmode.png#gh-light-mode-only" alt="fluent">
 
 ## ⚡ Features
 

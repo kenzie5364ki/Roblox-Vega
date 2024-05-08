@@ -1,7 +1,7 @@
 local Library = loadstring(game:HttpGet("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/InterfaceManager.lua"))()
-
+ 
 local Window = Library:CreateWindow{
     Title = `Fluent {Library.Version}`,
     SubTitle = "by Actual Master Oogway",
@@ -42,7 +42,12 @@ do
         Content = "This is a paragraph.\nSecond line!"
     }
 
-
+    Tabs.Main:AddParagraph{
+        Title = "Paragraph",
+        Content = "This is a paragraph with a center alignment!",
+        TitleAlignment = "Middle",
+        ContentAlignment = Enum.TextXAlignment.Center
+    }
 
     Tabs.Main:CreateButton{
         Title = "Button",
@@ -228,6 +233,25 @@ do
     Input:OnChanged(function()
         print("Input updated:", Input.Value)
     end)
+
+    Tabs.Main:CreateButton{
+        Title = "Really Really big Dropdown",
+        Description = "",
+        Callback = function()
+            local Values = {}
+
+            for i = 1, 1000 do
+                Values[i] = i
+            end
+
+            Tabs.Main:AddDropdown("BIGDropdown", {
+                Title = "Big Dropdown",
+                Values = Values,
+                Multi = false,
+                Default = 1,
+            })
+        end
+    }
 end
 
 

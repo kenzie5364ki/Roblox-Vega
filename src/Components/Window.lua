@@ -1,4 +1,4 @@
--- i will rewrite this someday
+-- i will rewrite this someday (dawid)
 local UserInputService = game:GetService("UserInputService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 local Camera = game:GetService("Workspace").CurrentCamera
@@ -318,11 +318,13 @@ return function(Config)
 		Window.Minimized = not Window.Minimized
 		Window.Root.Visible = not Window.Minimized
 		if not MinimizeNotif then
-			MinimizeNotif = true
 			local Key = Library.MinimizeKeybind and Library.MinimizeKeybind.Value or Library.MinimizeKey.Name
+
+			MinimizeNotif = true
+			
 			Library:Notify({
 				Title = "Interface",
-				Content = "Press " .. Key .. " to toggle the interface.",
+				Content = `Press {Library.Utilities:Prettify(Key)} to toggle the interface.`,
 				Duration = 6
 			})
 		end
@@ -375,6 +377,12 @@ return function(Config)
 		end
 
 		Dialog:Open()
+
+		if Config.Yield then
+			Dialog.TintFrame.Destroying:Wait()
+		end
+
+		return Dialog
 	end
 
 	local TabModule = require(Components.Tab):Init(Window)
@@ -387,7 +395,7 @@ return function(Config)
 	end
 
 	function Window:SelectTab(Tab)
-		TabModule:SelectTab(1)
+		TabModule:SelectTab(Tab)
 	end
 
 	Creator.AddSignal(Window.TabHolder:GetPropertyChangedSignal("CanvasPosition"), function()

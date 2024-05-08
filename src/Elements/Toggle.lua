@@ -1,7 +1,7 @@
 local TweenService = game:GetService("TweenService")
 local Root = script.Parent.Parent
 local Creator = require(Root.Creator)
-
+ 
 local New = Creator.New
 local Components = Root.Components
 

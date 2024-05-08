@@ -1,13 +1,7 @@
-local UserInputService = game:GetService("UserInputService")
-local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
-local Camera = game:GetService("Workspace").CurrentCamera
-
 local Root = script.Parent.Parent
-local Flipper = require(Root.Packages.Flipper)
 local Creator = require(Root.Creator)
+local Button_Component = require(Root.Components.Button)
 
-local Spring = Flipper.Spring.new
-local Instant = Flipper.Instant.new
 local New = Creator.New
 
 local Dialog = {
@@ -20,9 +14,9 @@ function Dialog:Init(Window)
 end
 
 function Dialog:Create()
-	local NewDialog = {
+	local NewDialog, Library = {
 		Buttons = 0,
-	}
+	}, require(Root)
 
 	NewDialog.TintFrame = New("TextButton", {
 		Text = "",
@@ -120,7 +114,7 @@ function Dialog:Create()
 	local RootMotor, RootTransparency = Creator.SpringMotor(1, NewDialog.Root, "GroupTransparency")
 
 	function NewDialog:Open()
-		require(Root).DialogOpen = true
+		Library.DialogOpen = true
 		NewDialog.Scale.Scale = 1.1
 		TintTransparency(0.75)
 		RootTransparency(0)
@@ -128,7 +122,7 @@ function Dialog:Create()
 	end
 
 	function NewDialog:Close()
-		require(Root).DialogOpen = false
+		Library.DialogOpen = false
 		TintTransparency(1)
 		RootTransparency(1)
 		Scale(1.1)
@@ -142,7 +136,7 @@ function Dialog:Create()
 		Title = Title or "Button"
 		Callback = Callback or function() end
 
-		local Button = require(Root.Components.Button)("", NewDialog.ButtonHolder, true)
+		local Button = Button_Component("", NewDialog.ButtonHolder, true)
 		Button.Title.Text = Title
 
 		for _, Btn in next, NewDialog.ButtonHolder:GetChildren() do
@@ -153,7 +147,7 @@ function Dialog:Create()
 		end
 
 		Creator.AddSignal(Button.Frame.MouseButton1Click, function()
-			require(Root):SafeCallback(Callback)
+			Library:SafeCallback(Callback)
 			pcall(function()
 				NewDialog:Close()
 			end)

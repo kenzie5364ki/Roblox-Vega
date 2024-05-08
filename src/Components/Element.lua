@@ -1,19 +1,18 @@
 local Root = script.Parent.Parent
-local Flipper = require(Root.Packages.Flipper)
 local Creator = require(Root.Creator)
 local New = Creator.New
 
-local Spring = Flipper.Spring.new
-
-return function(Title, Desc, Parent, Hover)
+return function(Title, Desc, Parent, Hover, Config)
 	local Element = {}
+
+	Config = typeof(Config) == "table" and Config or {}
 
 	Element.TitleLabel = New("TextLabel", {
 		FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal),
 		Text = Title,
 		TextColor3 = Color3.fromRGB(240, 240, 240),
 		TextSize = 13,
-		TextXAlignment = Enum.TextXAlignment.Left,
+		TextXAlignment = Config.TitleAlignment or Enum.TextXAlignment.Left,
 		Size = UDim2.new(1, 0, 0, 14),
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BackgroundTransparency = 1,
@@ -28,7 +27,7 @@ return function(Title, Desc, Parent, Hover)
 		TextColor3 = Color3.fromRGB(200, 200, 200),
 		TextSize = 12,
 		TextWrapped = true,
-		TextXAlignment = Enum.TextXAlignment.Left,
+		TextXAlignment = Config.DescriptionAlignment or Enum.TextXAlignment.Left,
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,

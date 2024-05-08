@@ -1,5 +1,5 @@
 {
-  "name": "fluentlibrary",
+  "name": "fluentrenewedrbx",
   "version": "1.0.0",
   "description": "",
   "main": "init.lua",
@@ -8,7 +8,7 @@
     "bundle": "pnpm run rojo && lune build"
   },
   "keywords": [],
-  "author": "dawid",
+  "author": "Actual Master Oogway",
   "license": "MIT",
   "devDependencies": {
     "mkdirp": "^3.0.1"

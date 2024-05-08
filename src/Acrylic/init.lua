@@ -13,14 +13,14 @@ function Acrylic.init()
 	local depthOfFieldDefaults = {}
 
 	function Acrylic.Enable()
-		for _, effect in pairs(depthOfFieldDefaults) do
+		for _, effect in next, depthOfFieldDefaults do
 			effect.Enabled = false
 		end
 		baseEffect.Parent = game:GetService("Lighting")
 	end
 
 	function Acrylic.Disable()
-		for _, effect in pairs(depthOfFieldDefaults) do
+		for _, effect in next, depthOfFieldDefaults do
 			effect.Enabled = effect.enabled
 		end
 		baseEffect.Parent = nil
@@ -33,12 +33,12 @@ function Acrylic.init()
 			end
 		end
 
-		for _, child in pairs(game:GetService("Lighting"):GetChildren()) do
+		for _, child in next, game:GetService("Lighting"):GetChildren() do
 			register(child)
 		end
 
 		if game:GetService("Workspace").CurrentCamera then
-			for _, child in pairs(game:GetService("Workspace").CurrentCamera:GetChildren()) do
+			for _, child in next, game:GetService("Workspace").CurrentCamera:GetChildren() do
 				register(child)
 			end
 		end
