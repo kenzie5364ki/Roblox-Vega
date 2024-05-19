@@ -1,8 +1,9 @@
 name: Upload Release Assets
 
 on:
+  workflow_dispatch:
   release:
-    types: [created]
+    types: [ published, prereleased ]
 
 jobs:
   upload-release-assets:
