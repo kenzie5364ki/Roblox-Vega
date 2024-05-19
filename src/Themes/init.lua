@@ -7,7 +7,7 @@ local Themes = {
 		"Aqua",
 		"Amethyst",
 		"Rose"
-	},
+	}
 }
 
 for _, Theme in next, script:GetChildren() do
