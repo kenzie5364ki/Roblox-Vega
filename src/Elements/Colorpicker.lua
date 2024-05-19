@@ -505,7 +505,20 @@ function Element:New(Idx, Config)
 	Colorpicker:Display()
 
 	Library.Options[Idx] = Colorpicker
-	return Colorpicker
+
+	return setmetatable(Colorpicker, {
+		__newindex =  function(self, index, newvalue)
+			local NewValue_Type = typeof(newvalue)
+
+			if index == "Value" then
+				return Colorpicker[NewValue_Type == "table" and "SetValue" or "SetValueRGB"](Colorpicker, newvalue)
+			elseif index == "Transparency" and NewValue_Type == "number" then
+				return Colorpicker:SetValueRGB(Colorpicker.Value, newvalue)
+			end
+
+			return rawset(self, index, newvalue)
+		end
+	})
 end
 
 return Element

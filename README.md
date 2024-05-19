@@ -18,12 +18,13 @@ local Library = loadstring(game:HttpGet("https://github.com/ActualMasterOogway/F
 <br/>
 
 ## 📜 Usage
-
-[Example Script](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.lua)
+[Example Script the studio environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.client.lua)
+[Example Script for an exploit environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.lua)
 <br/>
 
 ## Credits
 
+- [Master Oogway](https://github.com/ActualMasterOogway/Fluent-Renewed) - The master mind behind Fluent Renewed
 - [dawid](https://github.com/dawid-scripts/Fluent) - The master mind behind Fluent
 - [Lucide](https://github.com/lucide-icons) - The sexy icons
 - [richie0866/remote-spy](https://github.com/richie0866/remote-spy) - Assets for the UI, some of the code

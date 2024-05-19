@@ -132,5 +132,14 @@ return function(Title, Desc, Parent, Hover, Config)
 		end)
 	end
 
-	return Element
+	return setmetatable(Element, {
+		__newindex =  function(self, index, newvalue)
+			if index == "Title" then
+				Element:SetTitle(newvalue)
+			elseif index == "Description" or index == "Desc" then
+				Element:SetDesc(newvalue)
+			end
+			return rawset(self, index, newvalue)
+		end
+	})
 end

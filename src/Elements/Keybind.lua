@@ -194,7 +194,15 @@ function Element:New(Idx, Config)
 	end)
 
 	Library.Options[Idx] = Keybind
-	return Keybind
+
+	return setmetatable(Keybind, {
+		__newindex =  function(self, index, newvalue)
+			if index == "Value" then
+				Keybind:SetValue(newvalue)
+			end
+			return rawset(self, index, newvalue)
+		end
+	})
 end
 
 return Element

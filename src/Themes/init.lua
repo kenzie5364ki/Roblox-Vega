@@ -2,11 +2,11 @@ local Themes = {
 	Names = {
 		"Dark",
 		"Darker",
+		"Vynixu",
 		"Light",
 		"Aqua",
 		"Amethyst",
-		"Rose",
-		"Honey"
+		"Rose"
 	},
 }
 

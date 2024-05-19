@@ -13,6 +13,7 @@ function Paragraph:New(Config)
 		TitleAlignment = Config.TitleAlignment == "Middle" and "Center" or Config.TitleAlignment,
 		DescriptionAlignment = Config.ContentAlignment == "Middle" and "Center" or Config.ContentAlignment
 	})
+
 	Paragraph.Frame.BackgroundTransparency = 0.92
 	Paragraph.Border.Transparency = 0.6
 

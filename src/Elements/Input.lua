@@ -77,7 +77,15 @@ function Element:New(Idx, Config)
 	end
 
 	Library.Options[Idx] = Input
-	return Input
+
+	return setmetatable(Input, {
+		__newindex =  function(self, index, newvalue)
+			if index == "Value" then
+				Input:SetValue(newvalue)
+			end
+			return rawset(self, index, newvalue)
+		end
+	})
 end
 
 return Element

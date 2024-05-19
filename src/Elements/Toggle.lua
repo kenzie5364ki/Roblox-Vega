@@ -99,7 +99,14 @@ function Element:New(Idx, Config)
 	Toggle:SetValue(Toggle.Value)
 
 	Library.Options[Idx] = Toggle
-	return Toggle
+	return setmetatable(Toggle, {
+		__newindex =  function(self, index, newvalue)
+			if index == "Value" then
+				return Toggle:SetValue(newvalue)
+			end
+			return rawset(self, index, newvalue)
+		end
+	})
 end
 
 return Element

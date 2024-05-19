@@ -1,6 +1,7 @@
 local Root = script.Parent.Parent
 local Creator = require(Root.Creator)
 local Button_Component = require(Root.Components.Button)
+local Signal = require(Root.Packages.Flipper.Signal)
 
 local New = Creator.New
 
@@ -16,6 +17,8 @@ end
 function Dialog:Create()
 	local NewDialog, Library = {
 		Buttons = 0,
+		Closing = Signal.new(),
+		Closed = Signal.new()
 	}, require(Root)
 
 	NewDialog.TintFrame = New("TextButton", {
@@ -122,6 +125,7 @@ function Dialog:Create()
 	end
 
 	function NewDialog:Close()
+		NewDialog.Closing:Fire()
 		Library.DialogOpen = false
 		TintTransparency(1)
 		RootTransparency(1)
@@ -129,6 +133,7 @@ function Dialog:Create()
 		NewDialog.Root.UIStroke:Destroy()
 		task.wait(0.15)
 		NewDialog.TintFrame:Destroy()
+		NewDialog.Closed:Fire()
 	end
 
 	function NewDialog:Button(Title, Callback)
@@ -141,8 +146,7 @@ function Dialog:Create()
 
 		for _, Btn in next, NewDialog.ButtonHolder:GetChildren() do
 			if Btn:IsA("TextButton") then
-				Btn.Size =
-					UDim2.new(1 / NewDialog.Buttons, -(((NewDialog.Buttons - 1) * 10) / NewDialog.Buttons), 0, 32)
+				Btn.Size = UDim2.new(1 / NewDialog.Buttons, -((NewDialog.Buttons - 1) * 10 / NewDialog.Buttons), 0, 32)
 			end
 		end
 

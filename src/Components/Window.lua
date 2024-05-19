@@ -1,7 +1,4 @@
--- i will rewrite this someday (dawid)
-local UserInputService = game:GetService("UserInputService")
-local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
-local Camera = game:GetService("Workspace").CurrentCamera
+-- a wise man once said: "i will rewrite this someday"
 
 local Root = script.Parent.Parent
 local Flipper = require(Root.Packages.Flipper)
@@ -10,17 +7,22 @@ local Acrylic = require(Root.Acrylic)
 local Assets = require(script.Parent.Assets)
 local Components = script.Parent
 
+local Library = require(Root)
+
+local UserInputService = Library.Utilities:Clone(game:GetService("UserInputService"))
+local Mouse = Library.Utilities:Clone(game:GetService("Players")).LocalPlayer:GetMouse()
+local Camera = Library.Utilities:Clone(game:GetService("Workspace")).CurrentCamera
+
 local Spring = Flipper.Spring.new
 local Instant = Flipper.Instant.new
 local New = Creator.New
 
 return function(Config)
-	local Library = require(Root)
-
 	local Window = {
 		Minimized = false,
 		Maximized = false,
 		Size = Config.Size,
+		MinSize = Config.MinSize,
 		CurrentPos = 0,
 		TabWidth = 0,
 		Position = UDim2.fromOffset(
@@ -280,7 +282,7 @@ return function(Config)
 
 			local TargetSize = Vector3.new(StartSize.X.Offset, StartSize.Y.Offset, 0) + Vector3.new(1, 1, 0) * Delta
 			local TargetSizeClamped =
-				Vector2.new(math.clamp(TargetSize.X, 470, 2048), math.clamp(TargetSize.Y, 380, 2048))
+				Vector2.new(math.clamp(TargetSize.X, Window.MinSize.X, 2048), math.clamp(TargetSize.Y, Window.MinSize.Y, 2048))
 
 			SizeMotor:setGoal({
 				X = Flipper.Instant.new(TargetSizeClamped.X),
@@ -379,19 +381,20 @@ return function(Config)
 		Dialog:Open()
 
 		if Config.Yield then
-			Dialog.TintFrame.Destroying:Wait()
+			Dialog.Closed:Wait()
 		end
 
 		return Dialog
 	end
 
 	local TabModule = require(Components.Tab):Init(Window)
-	function Window:AddTab(TabConfig)
-		return Window:CreateTab(TabConfig)
-	end
 
 	function Window:CreateTab(TabConfig)
 		return TabModule:New(TabConfig.Title, TabConfig.Icon, Window.TabHolder)
+	end
+
+	function Window:AddTab(TabConfig)
+		return Window:CreateTab(TabConfig)
 	end
 
 	function Window:SelectTab(Tab)

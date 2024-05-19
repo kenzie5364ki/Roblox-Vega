@@ -142,6 +142,7 @@ function Creator.New(Name, Properties, Children)
 	end
 
 	ApplyCustomProps(Object, Properties)
+
 	return Object
 end
 

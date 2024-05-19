@@ -2,13 +2,13 @@ local function Clone(ToClone)
 	local Type = typeof(ToClone)
 
 	if Type == "function" and (clonefunc or clonefunction) then
-		return (clonefunc or clonefunction)(ToClone)
+		return (clonefunc or clonefunction)(ToClone), true
 	elseif Type == "Instance" and (cloneref or clonerefrence) then
-		return (cloneref or clonerefrence)(ToClone)
+		return (cloneref or clonerefrence)(ToClone), true
 	elseif Type == "table" then
 		local function deepcopy(orig, copies)
 			copies = copies or {}
-			local orig_type, copy = type(orig), nil
+			local orig_type, copy = typeof(orig), nil
 
 			if orig_type == 'table' then
 				if copies[orig] then
@@ -22,8 +22,10 @@ local function Clone(ToClone)
 						copy[deepcopy(orig_key, copies)] = deepcopy(orig_value, copies)
 					end
 
-					setmetatable(copy, deepcopy((getrawmetatable or getmetatable)(orig), copies))
+					(setrawmetatable or setmetatable)(copy, deepcopy((getrawmetatable or getmetatable)(orig), copies))
 				end
+			elseif orig_type == 'Instance' or orig_type == 'function' then
+				copy = Clone(orig)
 			else
 				copy = orig
 			end
@@ -31,18 +33,18 @@ local function Clone(ToClone)
 			return copy
 		end
 
-		return deepcopy(ToClone)
+		return deepcopy(ToClone), true
 	else
-		return ToClone
+		return ToClone, false
 	end
 end
 
-local MarketplaceService = Clone(game:GetService("MarketplaceService"))
-local TweenService = Clone(game:GetService("TweenService"))
-local Camera = Clone(game:GetService("Workspace").CurrentCamera)
+local MarketplaceService: MarketplaceService = Clone(game:GetService("MarketplaceService"))
+local TweenService: TweenService = Clone(game:GetService("TweenService"))
+local Camera: Camera = Clone(game:GetService("Workspace")).CurrentCamera
 
-local Root = script
-local Components = Root.Components
+local Root: ModuleScript = script
+local Components: Folder = Root.Components
 
 local Creator = require(Root.Creator)
 local ElementsTable = require(Root.Elements)
@@ -52,7 +54,7 @@ local Themes = require(Root.Themes)
 
 local NotificationModule = require(Components.Notification)
 
-local SharedTable = ((typeof(shared) == "table") and shared) or ((typeof(_G) == "table") and _G) or ((typeof(getgenv) == "function" and typeof(getgenv()) == "table") and getgenv())
+local SharedTable = shared or _G or (getgenv and getgenv()) or getfenv()
 local New = Creator.New
 
 local GUI = New("ScreenGui", {
@@ -97,10 +99,12 @@ GUI.Parent = (function()
 	return error("Seriously bad engine. Can't find a place to store the GUI. Robust code can't help this much incompetence.")
 end)()
 
+SharedTable.FluentRenewed = SharedTable.FluentRenewed or {}
+
 NotificationModule:Init(GUI)
 
 local Library = {
-	Version = "1.0.0",
+	Version = "1.0.2",
 
 	OpenFrames = {},
 	Options = {},
@@ -114,6 +118,7 @@ local Library = {
 	},
 	Connections = Creator.Signals,
 	Unloaded = false,
+	Loaded = true,
 
 	Theme = "Dark",
 	DialogOpen = false,
@@ -127,27 +132,21 @@ local Library = {
 }
 
 function Library:SafeCallback(Function, ...)
-	if not Function then
+	if typeof(Function) ~= "function" then
 		return
 	end
 
 	local Success, Event = pcall(Function, ...)
+
 	if not Success then
 		local _, i = Event:find(":%d+: ")
 
-		if not i then
-			return Library:Notify({
-				Title = "Interface",
-				Content = "Callback error",
-				SubContent = Event,
-				Duration = 5,
-			})
-		end
+		task.delay(0, error, debug.traceback(Event))
 
 		return Library:Notify({
 			Title = "Interface",
 			Content = "Callback error",
-			SubContent = Event:sub(i + 1),
+			SubContent = not i and Event or Event:sub(i + 1),
 			Duration = 5,
 		})
 	end
@@ -221,10 +220,15 @@ function Library:CreateWindow(Config)
 		Config.Title = Success and Game_Name or "Fluent Renewed"
 	end
 
+	Config.MinSize = Config.MinSize or Vector2.new(470, 380)
+
+	Config.Size = Config.Resize ~= true and Config.Size or UDim2.fromOffset(Library.Utilities:Resize(Config.Size.X.Offset, Config.Size.Y.Offset))
+	Config.MinSize = Config.Resize ~= true and Config.MinSize or Vector2.new(Library.Utilities:Resize(Config.MinSize.X, Config.MinSize.Y))
+
 	Library.MinimizeKey = Config.MinimizeKey or Enum.KeyCode.LeftControl
 	Library.UseAcrylic = Config.Acrylic or false
 	Library.Acrylic = Config.Acrylic or false
-	Library.Theme = Config.Theme or "Dark"
+	Library.Theme = Config.Theme or "Vynixu"
 
 	if Config.Acrylic then
 		Acrylic.init()
@@ -232,7 +236,8 @@ function Library:CreateWindow(Config)
 
 	local Window = require(Components.Window){
 		Parent = GUI,
-		Size = Config.Resize ~= true and Config.Size or UDim2.fromOffset(Library.Utilities:Resize(Config.Size.X.Offset, Config.Size.Y.Offset)),
+		Size = Config.Size,
+		MinSize = Config.MinSize,
 		Title = Config.Title,
 		SubTitle = Config.SubTitle,
 		TabWidth = Config.TabWidth,
@@ -260,6 +265,7 @@ end
 function Library:Destroy()
 	if Library.Window then
 		Library.Unloaded = true
+		Library.Loaded = false
 
 		if typeof(Library.OnUnload) == "function" then
 			Library:SafeCallback(Library.OnUnload, tick())
@@ -359,10 +365,6 @@ end
 function Library.Utilities:Resize(x, y)
     local X, Y, CurrentSize = x / 1920, y / 1080, Camera.ViewportSize
     return CurrentSize.X * X, CurrentSize.Y * Y
-end
-
-if SharedTable then
-	SharedTable.FluentRenewed = Library
 end
 
 return Library

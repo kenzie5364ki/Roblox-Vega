@@ -58,7 +58,7 @@ function Element:New(Idx, Config)
 		BackgroundTransparency = 1,
 		ThemeTag = {
 			ImageColor3 = "SubText",
-		},
+		}
 	})
 
 	local DropdownInner = New("TextButton", {
@@ -68,8 +68,8 @@ function Element:New(Idx, Config)
 		BackgroundTransparency = 0.9,
 		Parent = DropdownFrame.Frame,
 		ThemeTag = {
-			BackgroundColor3 = "DropdownFrame",
-		},
+			BackgroundColor3 = "DropdownFrame"
+		}
 	}, {
 		New("UICorner", {
 			CornerRadius = UDim.new(0, 5),
@@ -140,7 +140,7 @@ function Element:New(Idx, Config)
 		AnchorPoint = Vector2.new(0, 0.5),
 		ThemeTag = {
 			BackgroundColor3 = "Accent",
-		},
+		}
 	}, {
 		New("UICorner", {
 			CornerRadius = UDim.new(0, 2),
@@ -159,8 +159,8 @@ function Element:New(Idx, Config)
 		Position = UDim2.fromOffset(10, 0),
 		Name = "ButtonLabel",
 		ThemeTag = {
-			TextColor3 = "Text",
-		},
+			TextColor3 = "Text"
+		}
 	})
 
 	local Button_BuildList = New("TextButton", {
@@ -169,14 +169,14 @@ function Element:New(Idx, Config)
 		ZIndex = 23,
 		Text = "",
 		ThemeTag = {
-			BackgroundColor3 = "DropdownOption",
-		},
+			BackgroundColor3 = "DropdownOption"
+		}
 	}, {
 		ButtonSelector_BuildList,
 		ButtonLabel_BuildList,
 		New("UICorner", {
 			CornerRadius = UDim.new(0, 6),
-		}),
+		})
 	})
 
 	local DropdownHolderCanvas = New("Frame", {
@@ -308,16 +308,23 @@ function Element:New(Idx, Config)
 
 		for Idx, Value in next, Values do
 			local Table = {}
+			local Selected
 
 			Count = Count + 1
 
 			local Button = Button_BuildList:Clone()
 
-			local ButtonSelector = Button.Frame
+			local ButtonSelector, ButtonLabel = Button.Frame, Button.ButtonLabel
 
-			local ButtonLabel = Button.ButtonLabel
-
-			local Selected
+			Creator.AddThemeObject(Button, {
+				BackgroundColor3 = "DropdownOption"
+			})
+			Creator.AddThemeObject(ButtonSelector, {
+				BackgroundColor3 = "Accent",
+			})
+			Creator.AddThemeObject(ButtonLabel, {
+				TextColor3 = "Text"
+			})
 
 			if Config.Multi then
 				Selected = Dropdown.Value[Value]
@@ -501,7 +508,17 @@ function Element:New(Idx, Config)
 	end
 
 	Library.Options[Idx] = Dropdown
-	return Dropdown
+
+	return setmetatable(Dropdown, {
+		__newindex =  function(self, index, newvalue)
+			if index == "Value" then
+				Dropdown:SetValue(newvalue)
+			elseif index == "Values" or index == "List" then
+				Dropdown:SetValues(newvalue)
+			end
+			return rawset(self, index, newvalue)
+		end
+	})
 end
 
 return Element

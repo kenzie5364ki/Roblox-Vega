@@ -15,11 +15,11 @@ function Element:New(Idx, Config)
 
 	local Slider = {
 		Value = nil,
-		Min = Config.Min or 0,
+		Min = typeof(Config.Min) == "number" and Config.Min or 0,
 		Max = Config.Max,
-		Rounding = Config.Rounding or 0,
-		Callback = Config.Callback or function(Value) end,
-		Type = "Slider",
+		Rounding = typeof(Config.Rounding) == "number" and Config.Rounding or 0,
+		Callback = typeof(Config.Min) == "function" and Config.Callback or function(Value, OldValue) end,
+		Type = "Slider"
 	}
 
 	local Dragging = false
@@ -37,13 +37,13 @@ function Element:New(Idx, Config)
 		Image = "http://www.roblox.com/asset/?id=12266946128",
 		ThemeTag = {
 			ImageColor3 = "Accent",
-		},
+		}
 	})
 
 	local SliderRail = New("Frame", {
 		BackgroundTransparency = 1,
 		Position = UDim2.fromOffset(7, 0),
-		Size = UDim2.new(1, -14, 1, 0),
+		Size = UDim2.new(1, -14, 1, 0)
 	}, {
 		SliderDot,
 	})
@@ -52,16 +52,17 @@ function Element:New(Idx, Config)
 		Size = UDim2.new(0, 0, 1, 0),
 		ThemeTag = {
 			BackgroundColor3 = "Accent",
-		},
+		}
 	}, {
 		New("UICorner", {
 			CornerRadius = UDim.new(1, 0),
-		}),
+		})
 	})
 
-	local SliderDisplay = New("TextLabel", {
+	local SliderDisplay = New("TextBox", {
 		FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json"),
 		Text = "Value",
+		ClearTextOnFocus = true,
 		TextSize = 12,
 		TextWrapped = true,
 		TextXAlignment = Enum.TextXAlignment.Right,
@@ -72,7 +73,7 @@ function Element:New(Idx, Config)
 		AnchorPoint = Vector2.new(1, 0.5),
 		ThemeTag = {
 			TextColor3 = "SubText",
-		},
+		}
 	})
 
 	local SliderInner = New("Frame", {
@@ -83,7 +84,7 @@ function Element:New(Idx, Config)
 		Parent = SliderFrame.Frame,
 		ThemeTag = {
 			BackgroundColor3 = "SliderRail",
-		},
+		}
 	}, {
 		New("UICorner", {
 			CornerRadius = UDim.new(1, 0),
@@ -93,7 +94,7 @@ function Element:New(Idx, Config)
 		}),
 		SliderDisplay,
 		SliderFill,
-		SliderRail,
+		SliderRail
 	})
 
 	Creator.AddSignal(SliderDot.InputBegan, function(Input)
@@ -128,6 +129,10 @@ function Element:New(Idx, Config)
 		end
 	end)
 
+	Creator.AddSignal(SliderDisplay.FocusLost, function()
+		Slider:SetValue(tonumber(SliderDisplay.Text) or Slider.Value)
+	end)
+
 	function Slider:OnChanged(Func)
 		Slider.Changed = Func
 		Func(Slider.Value)
@@ -153,7 +158,15 @@ function Element:New(Idx, Config)
 	Slider:SetValue(typeof(Config.Default) == "number" and Config.Default or Slider.Min)
 
 	Library.Options[Idx] = Slider
-	return Slider
+
+	return setmetatable(Slider, {
+		__newindex =  function(self, index, newvalue)
+			if index == "Value" then
+				return Slider:SetValue(newvalue)
+			end
+			return rawset(self, index, newvalue)
+		end
+	})
 end
 
 return Element
