@@ -19,6 +19,7 @@ local Library = loadstring(game:HttpGet("https://github.com/ActualMasterOogway/F
 
 ## 📜 Usage
 [Example Script the studio environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.client.lua)
+
 [Example Script for an exploit environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.lua)
 <br/>
 
