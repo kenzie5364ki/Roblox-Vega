@@ -146,7 +146,7 @@ function TabModule:New(Title, Icon, Parent)
 	Tab.Container = Tab.ContainerFrame
 	Tab.ScrollFrame = Tab.Container
 
-	function Tab:AddSection(SectionTitle)
+	function Tab:CreateSection(SectionTitle)
 		local Section = { Type = "Section" }
 
 		local SectionFrame = require(Components.Section)(SectionTitle, Tab.Container)
@@ -155,6 +155,10 @@ function TabModule:New(Title, Icon, Parent)
 
 		setmetatable(Section, Elements)
 		return Section
+	end
+
+	function Tab:AddSection(SectionTitle)
+		return Tab:CreateSection(SectionTitle)
 	end
 
 	setmetatable(Tab, Elements)

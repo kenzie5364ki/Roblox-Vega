@@ -12,22 +12,22 @@ local Window = Main:CreateWindow{
 }
 
 local Tabs = {
-    Main = Window:AddTab{
+    Main = Window:CreateTab{
         Title = "Main",
         Icon = "circle-user-round"
     },
-    Settings = Window:AddTab{
+    Settings = Window:CreateTab{
         Title = "Settings",
         Icon = "settings"
     }
 }
 
-Tabs.Main:AddParagraph({
+Tabs.Main:CreateParagraph({
     Title = "Paragraph",
     Content = "This is a paragraph.\nSecond line!"
 })
 
-Tabs.Main:AddParagraph({
+Tabs.Main:CreateParagraph({
     Title = "Paragraph",
     Content = "This is a paragraph with a center alignment!",
     TitleAlignment = "Middle",
@@ -35,7 +35,7 @@ Tabs.Main:AddParagraph({
 })
 
 
-Tabs.Main:AddButton({
+Tabs.Main:CreateButton({
     Title = "Button",
     Description = "Very important button",
     Callback = function()
@@ -67,9 +67,9 @@ Tabs.Main:AddButton({
     end
 })
 
-local Toggle = Tabs.Main:AddToggle("Toggle", {Title = "Toggle", Default = false })
+local Toggle = Tabs.Main:CreateToggle("Toggle", {Title = "Toggle", Default = false })
 
-local Slider = Tabs.Main:AddSlider("Slider", {
+local Slider = Tabs.Main:CreateSlider("Slider", {
     Title = "Slider",
     Description = "This is a slider",
     Default = 2.0,
@@ -84,7 +84,7 @@ Slider.Value = 4.5
 
 print(Slider.Value)
 
-local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
+local Dropdown = Tabs.Main:CreateDropdown("Dropdown", {
     Title = "Dropdown",
     Values = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
     Multi = false,
@@ -93,13 +93,14 @@ local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
 
 Dropdown:SetValue("four")
 
-print(Slider.Value, Slider.Values)
+print(Dropdown.Value)
 
-Slider.Value = 4.5
+Dropdown.Value = 4.5
+Dropdown.Values = {"fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twentyone", "twentytwo", "twentythree", "twentyfour", "twentyfive", "twentysix", "twentyseven", "twentyeight"}
 
-print(Slider.Value)
+print(Dropdown.Value)
 
-local MultiDropdown = Tabs.Main:AddDropdown("MultiDropdown", {
+local MultiDropdown = Tabs.Main:CreateDropdown("MultiDropdown", {
     Title = "Dropdown",
     Description = "You can select multiple values.",
     Values = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
@@ -113,19 +114,27 @@ MultiDropdown:SetValue({
     seven = false
 })
 
-local Colorpicker = Tabs.Main:AddColorpicker("Colorpicker", {
+local MultiInstanceDropdown = Tabs.Main:CreateDropdown("MultiInstanceDropdown", {
+    Title = "Instance Dropdown",
+    Description = "You can select multiple values and any instance or any other value!",
+    Values = {workspace, 5, Enum.JoinSource, Enum.MarketplaceBulkPurchasePromptStatus.Error},
+    Multi = true,
+    Default = {5},
+})
+
+local Colorpicker = Tabs.Main:CreateColorpicker("Colorpicker", {
     Title = "Colorpicker",
     Default = Color3.fromRGB(96, 205, 255)
 })
 
-local TColorpicker = Tabs.Main:AddColorpicker("TransparencyColorpicker", {
+local TColorpicker = Tabs.Main:CreateColorpicker("TransparencyColorpicker", {
     Title = "Colorpicker",
     Description = "but you can change the transparency.",
     Transparency = 0,
     Default = Color3.fromRGB(96, 205, 255)
 })
 
-local Keybind = Tabs.Main:AddKeybind("Keybind", {
+local Keybind = Tabs.Main:CreateKeybind("Keybind", {
     Title = "KeyBind",
     Mode = "Hold",
     Default = "LeftControl",
@@ -134,7 +143,7 @@ local Keybind = Tabs.Main:AddKeybind("Keybind", {
     end
 })
 
-local Input = Tabs.Main:AddInput("Input", {
+local Input = Tabs.Main:CreateInput("Input", {
     Title = "Input",
     Default = "Default",
     Numeric = false,
@@ -159,10 +168,22 @@ end)
 
 MultiDropdown:OnChanged(function(Value)
     local Values = {}
+
     for Value, State in next, Value do
         table.insert(Values, Value)
     end
+
     print("Mutlidropdown changed:", table.concat(Values, ", "))
+end)
+
+MultiInstanceDropdown:OnChanged(function(Value)
+    local Values = {}
+
+    for Value, State in next, Value do
+        table.insert(Values, typeof(Value))
+    end
+
+    print("Mutlidropdown with instance selection changed:", table.concat(Values, ", "))
 end)
 
 Colorpicker:OnChanged(function()
@@ -186,7 +207,7 @@ Tabs.Main:CreateButton{
             Values[i] = i
         end
 
-        Tabs.Main:AddDropdown("Dropdown", {
+        Tabs.Main:CreateDropdown("Dropdown", {
             Title = "Big Dropdown",
             Values = Values,
             Multi = false,
@@ -206,9 +227,9 @@ task.spawn(function()
     end
 end)
 
-local InterfaceSection = Tabs.Settings:AddSection("Interface")
+local InterfaceSection = Tabs.Settings:CreateSection("Interface")
 
-InterfaceSection:AddDropdown("InterfaceTheme", {
+InterfaceSection:CreateDropdown("InterfaceTheme", {
     Title = "Theme",
     Description = "Changes the interface theme.",
     Values = Main.Themes,
@@ -219,7 +240,7 @@ InterfaceSection:AddDropdown("InterfaceTheme", {
 })
 
 if Main.UseAcrylic then
-    InterfaceSection:AddToggle("AcrylicToggle", {
+    InterfaceSection:CreateToggle("AcrylicToggle", {
         Title = "Acrylic",
         Description = "The blurred background requires graphic quality 8+",
         Default = Main.Acrylic,
@@ -229,7 +250,7 @@ if Main.UseAcrylic then
     })
 end
 
-InterfaceSection:AddToggle("TransparentToggle", {
+InterfaceSection:CreateToggle("TransparentToggle", {
     Title = "Transparency",
     Description = "Makes the interface transparent.",
     Default = Main.Transparency,
@@ -238,7 +259,7 @@ InterfaceSection:AddToggle("TransparentToggle", {
     end
 })
 
-InterfaceSection:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = "RightShift" })
+InterfaceSection:CreateKeybind("MenuKeybind", { Title = "Minimize Bind", Default = "RightShift" })
 Main.MinimizeKeybind = Main.Options.MenuKeybind 
 
 Window:SelectTab(1)

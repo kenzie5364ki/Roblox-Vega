@@ -154,6 +154,7 @@ end
 
 function Library.Utilities:Truncate(number: number, decimals: number, round: boolean)
 	local shift = 10 ^ (typeof(decimals) == "number" and math.max(decimals, 0) or 0)
+
 	if round then
 		return math.round(number * shift) // 1 / shift
 	else

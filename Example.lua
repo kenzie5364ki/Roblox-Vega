@@ -146,7 +146,21 @@ do
         print("Mutlidropdown changed:", table.concat(Values, ", "))
     end)
 
+    local MultiInstanceDropdown = Tabs.Main:CreateDropdown("MultiInstanceDropdown", {
+        Title = "Instance Dropdown",
+        Description = "You can select multiple values and any instance or any other value!",
+        Values = {workspace, 5, Enum.JoinSource, Enum.MarketplaceBulkPurchasePromptStatus.Error},
+        Multi = true,
+        Default = {workspace},
+    })
 
+    MultiInstanceDropdown:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, typeof(Value))
+        end
+        print("Mutlidropdown with instance selection changed:", table.concat(Values, ", "))
+    end)
 
     local Colorpicker = Tabs.Main:CreateColorpicker("Colorpicker", {
         Title = "Colorpicker",

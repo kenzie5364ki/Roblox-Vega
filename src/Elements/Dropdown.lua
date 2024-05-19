@@ -398,7 +398,7 @@ function Element:New(Idx, Config)
 				end
 			end)
 
-			ButtonLabel.Text = Value
+			ButtonLabel.Text = typeof(Value) ~= "number" and tostring(Library.Utilities:Prettify(Value)) or Value
 			Button.Parent = DropdownScrollFrame
 
 			Table:UpdateButton()
@@ -473,32 +473,32 @@ function Element:New(Idx, Config)
 
 	local Defaults = {}
 
-	if type(Config.Default) == "string" then
-		local Idx = table.find(Dropdown.Values, Config.Default)
-		if Idx then
-			table.insert(Defaults, Idx)
-		end
-	elseif type(Config.Default) == "table" then
+	if type(Config.Default) == "table" then
 		for _, Value in next, Config.Default do
 			local Idx = table.find(Dropdown.Values, Value)
+
 			if Idx then
 				table.insert(Defaults, Idx)
 			end
 		end
+		table.clear(Config.Default)
 	elseif type(Config.Default) == "number" and Dropdown.Values[Config.Default] ~= nil then
 		table.insert(Defaults, Config.Default)
+	else
+		local Idx = table.find(Dropdown.Values, Config.Default)
+		if Idx then
+			table.insert(Defaults, Idx)
+		end
 	end
 
 	if next(Defaults) then
 		for i = 1, #Defaults do
 			local Index = Defaults[i]
+
 			if Config.Multi then
 				Dropdown.Value[Dropdown.Values[Index]] = true
 			else
 				Dropdown.Value = Dropdown.Values[Index]
-			end
-
-			if not Config.Multi then
 				break
 			end
 		end
