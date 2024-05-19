@@ -9,17 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4.1.6
 
       - name: Upload Fluent.rbxm to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2.0.5
         with:
           files: Distribution/Fluent.rbxm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Fluent.lua to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2.0.5
         with:
           files: Distribution/Fluent.lua
         env:
