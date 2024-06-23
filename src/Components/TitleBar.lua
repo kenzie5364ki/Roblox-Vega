@@ -9,8 +9,6 @@ return function(Config)
 
 	local Library = require(Root)
 
-	local TweenService = Library.Utilities:Clone(game:GetService("TweenService"))
-
 	local function BarButton(Icon, Pos, Parent, Debounce, Callback)
 		local Button = {
 			Callback = Callback or function() end,

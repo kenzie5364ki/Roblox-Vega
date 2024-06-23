@@ -14,6 +14,8 @@ local function createAcrylicBlur(distance)
 		bottomRight = Vector2.new(),
 	}
 	local model = createAcrylic()
+	local mesh = model:FindFirstChildWhichIsA("SpecialMesh")
+
 	model.Parent = BlurFolder
 
 	local function updatePositions(size, position)
@@ -46,7 +48,10 @@ local function createAcrylicBlur(distance)
 
 		model.CFrame =
 			CFrame.fromMatrix((topLeft3D + bottomRight3D) / 2, camera.XVector, camera.YVector, camera.ZVector)
-		model.Mesh.Scale = Vector3.new(width, height, 0)
+
+		if mesh then
+			mesh.Scale = Vector3.new(width, height, 0)
+		end
 	end
 
 	local function onChange(rbx)

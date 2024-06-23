@@ -5,10 +5,10 @@ local Window = Main:CreateWindow{
     SubTitle = "by Actual Master Oogway",
     TabWidth = 160,
     Size = UDim2.fromOffset(830, 525),
-    Resize = true, -- Resize this ^ Size according to a 1920x1080 screen, good for mobile users but may look weird on some devices
-    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Resize = true,
+    Acrylic = true,
     Theme = "Vynixu",
-    MinimizeKey = Enum.KeyCode.RightControl -- Used when theres no MinimizeKeybind
+    MinimizeKey = Enum.KeyCode.RightControl
 }
 
 local Tabs = {
@@ -33,7 +33,6 @@ Tabs.Main:CreateParagraph({
     TitleAlignment = "Middle",
     ContentAlignment = Enum.TextXAlignment.Center
 })
-
 
 Tabs.Main:CreateButton({
     Title = "Button",

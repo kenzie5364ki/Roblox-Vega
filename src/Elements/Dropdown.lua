@@ -1,4 +1,3 @@
-local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 local Camera = game:GetService("Workspace").CurrentCamera
@@ -105,7 +104,7 @@ function Element:New(Idx, Config)
 		DropdownListLayout,
 	})
 
-	local DropdownHolderFrame = New("Frame", {
+	local DropdownHolderFrame: Frame = New("Frame", {
 		Size = UDim2.fromScale(1, 0.6),
 		ThemeTag = {
 			BackgroundColor3 = "DropdownHolder",
@@ -248,11 +247,12 @@ function Element:New(Idx, Config)
 		Dropdown.Opened = true
 		ScrollFrame.ScrollingEnabled = false
 		DropdownHolderCanvas.Visible = true
-		TweenService:Create(
-			DropdownHolderFrame,
-			TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-			{ Size = UDim2.fromScale(1, 1) }
-		):Play()
+		DropdownHolderFrame:TweenSize(
+			UDim2.fromScale(1, 1),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Quart,
+			.2
+		)
 	end
 
 	function Dropdown:Close()

@@ -23,7 +23,7 @@ function Element:New(Config)
 		Parent = ButtonFrame.Frame,
 		ThemeTag = {
 			ImageColor3 = "Text",
-		},
+		}
 	})
 
 	Creator.AddSignal(ButtonFrame.Frame.MouseButton1Click, function()

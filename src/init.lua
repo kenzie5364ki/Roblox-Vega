@@ -43,7 +43,7 @@ local MarketplaceService: MarketplaceService = Clone(game:GetService("Marketplac
 local TweenService: TweenService = Clone(game:GetService("TweenService"))
 local Camera: Camera = Clone(game:GetService("Workspace")).CurrentCamera
 
-local Root: ModuleScript = script
+local Root = script
 local Components: Folder = Root.Components
 
 local Creator = require(Root.Creator)
@@ -141,7 +141,7 @@ function Library:SafeCallback(Function, ...)
 	if not Success then
 		local _, i = Event:find(":%d+: ")
 
-		task.delay(0, error, debug.traceback(Event))
+		task.defer(error, debug.traceback(Event))
 
 		return Library:Notify({
 			Title = "Interface",
@@ -170,7 +170,7 @@ function Library.Utilities:GetIcon(Name: string)
 	return Name ~= "SetIcon" and Icons[Name] or nil
 end
 
-function Library.Utilities:Prettify(ToPrettify: EnumItem | string | number)
+function Library.Utilities:Prettify(ToPrettify: EnumItem & string & number)
 	local Type = typeof(ToPrettify)
 
 	if Type == "EnumItem" then

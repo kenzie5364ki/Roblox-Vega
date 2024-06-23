@@ -25,7 +25,7 @@ function Element:New(Idx, Config)
 	Toggle.SetTitle = ToggleFrame.SetTitle
 	Toggle.SetDesc = ToggleFrame.SetDesc
 
-	local ToggleCircle = New("ImageLabel", {
+	local ToggleCircle: ImageLabel = New("ImageLabel", {
 		AnchorPoint = Vector2.new(0, 0.5),
 		Size = UDim2.fromOffset(14, 14),
 		Position = UDim2.new(0, 2, 0.5, 0),
@@ -43,7 +43,7 @@ function Element:New(Idx, Config)
 		},
 	})
 
-	local ToggleSlider = New("Frame", {
+	local ToggleSlider: Frame = New("Frame", {
 		Size = UDim2.fromOffset(36, 18),
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -10, 0.5, 0),
@@ -71,11 +71,12 @@ function Element:New(Idx, Config)
 
 		Creator.OverrideTag(ToggleBorder, { Color = Toggle.Value and "Accent" or "ToggleSlider" })
 		Creator.OverrideTag(ToggleCircle, { ImageColor3 = Toggle.Value and "ToggleToggled" or "ToggleSlider" })
-		TweenService:Create(
-			ToggleCircle,
-			TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
-			{ Position = UDim2.new(0, Toggle.Value and 19 or 2, 0.5, 0) }
-		):Play()
+		ToggleCircle:TweenPosition(
+			UDim2.new(0, Toggle.Value and 19 or 2, 0.5, 0),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Quint,
+			.25
+		)
 		TweenService:Create(
 			ToggleSlider,
 			TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
