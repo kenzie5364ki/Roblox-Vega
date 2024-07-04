@@ -3,14 +3,20 @@
     "tree": {
       "$className": "DataModel",
       "ReplicatedStorage": {
-        "MainModule": {
-          "$path": "src"
+        "Fluent": {
+          "$className": "Folder",
+          "MainModule": {
+            "$path": "src"
+          }
         }
       }, 
       "StarterPlayer": {
         "StarterPlayerScripts": {
-          "Example": {
-            "$path": "Example.client.lua"
+          "Fluent": {
+            "$className": "Folder",
+            "Example": {
+              "$path": "Example.client.luau"
+            }
           }
         }
       }

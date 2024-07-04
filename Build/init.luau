@@ -1,15 +1,23 @@
-local fs = require("@lune/fs")
-local process = require("@lune/process")
-local BuildCodegen = require("modules/BuildCodegen")
+local fs = require(`@lune/fs`)
+local process = require(`@lune/process`)
+local BundleModel = require(`modules/BundleModel`)
 
-local FilePath = "Distribution/Fluent.lua"
-local TemporaryMinifiedFile = "Distribution/TemporaryMinified.lua"
-local Header = fs.readFile("Build/header.luau")
+local OutputName = `Fluent`
+
+local FilePath = `Distribution/{OutputName}.luau`
+local TemporaryMinifiedFile = `Distribution/TemporaryMinified.luau`
+local Header = fs.readFile(`Build/header.luau`)
 
 local function minify(text)
 	fs.writeFile(TemporaryMinifiedFile, text)
 
-    process.spawn("darklua", {"process", TemporaryMinifiedFile, TemporaryMinifiedFile, "--config", "Build/darklua.json"})
+    local result = process.spawn(`darklua`, {`process`, TemporaryMinifiedFile, TemporaryMinifiedFile, `--config`, `Build/darklua.json`})
+
+	if result.ok then
+		print(result.stdout)
+	else
+		print(result.stderr)
+	end
 
 	local value = fs.readFile(TemporaryMinifiedFile)
 
@@ -18,12 +26,28 @@ local function minify(text)
 	return value
 end
 
-local SuccessfullyRead, Module = pcall(fs.readFile, "Distribution/Fluent.rbxm")
-if SuccessfullyRead then
-	local ModuleCodegen = BuildCodegen(Module, false)
+local function buildmodule()
+	local result = process.spawn(`rojo`, {`build`, `--output`, `Distribution/{OutputName}.rbxm`})
 
-	fs.writeFile(FilePath, `{Header}\n{minify(ModuleCodegen)}`)
+	if result.ok then
+		print(result.stdout)
+	else
+		print(result.stderr)
+	end
+end
+
+if not fs.isDir(`Distribution`) then
+	fs.writeDir(`Distribution`)
+end
+
+buildmodule()
+
+local SuccessfullyRead, Module = pcall(fs.readFile, `Distribution/{OutputName}.rbxm`)
+if SuccessfullyRead then
+	local ModuleCodegen = BundleModel(Module, false)
+
+	fs.writeFile(FilePath, `{Header}\n\n{minify(ModuleCodegen)}`)
 else
-	fs.writeFile(FilePath, `{Header}\n--[[\nCould not read Distribution/Fluent.rbxm, {Module}\n--]]`)
-	error(`--[[\nCould not read Distribution/Fluent.rbxm, {Module}\n--]]`, 1)
+	fs.writeFile(FilePath, `{Header}\n--[[\nCould not read Distribution/{OutputName}.rbxm, {Module}\n--]]`)
+	error(`--[[\nCould not read Distribution/{OutputName}.rbxm, {Module}\n--]]`, 1)
 end

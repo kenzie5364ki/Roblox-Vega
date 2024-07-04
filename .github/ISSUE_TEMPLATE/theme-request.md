@@ -8,4 +8,4 @@ assignees: ActualMasterOogway
 ---
 
 **Context:**
-Providing a clear image or sketch depicting the envisioned theme is imperative. It is highly recommended to accompany this with a script detailing the color scheme for the theme. An exemplar can be referenced [here](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/main/src/Themes/Vynixu.lua).
+Providing a clear image or sketch depicting the envisioned theme is imperative. It is highly recommended to accompany this with a script detailing the color scheme for the theme. An exemplar can be referenced [here](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/main/src/Themes/Vynixu.luau).

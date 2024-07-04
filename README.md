@@ -13,17 +13,17 @@
 You can load Fluent through a GitHub Release:
 
 ```lua
-local Library = loadstring(game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/main/Fluent.lua", true))()
+local Library = loadstring(game:GetService("HttpService"):GetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/main/Fluent.luau", true))()
 ```
 ```lua
-local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.lua", true))()
+local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau", true))()
 ```
 <br/>
 
 ## 📜 Usage
-[Example Script the studio environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.client.lua)
+[Example Script the studio environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.client.luau)
 
-[Example Script for an exploit environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.lua)
+[Example Script for an exploit environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.luau)
 <br/>
 
 ## Credits
