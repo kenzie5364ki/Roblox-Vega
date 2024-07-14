@@ -44,7 +44,7 @@ local TweenService: TweenService = Clone(game:GetService("TweenService"))
 local Camera: Camera = Clone(game:GetService("Workspace")).CurrentCamera
 
 local Root = script
-local Components: Folder = Root.Components
+local Components = Root.Components
 
 local Creator = require(Root.Creator)
 local ElementsTable = require(Root.Elements)
@@ -110,6 +110,8 @@ local Library = {
 	Options = {},
 	Themes = Themes.Names,
 
+	OnUnload = nil,
+	PostUnload = nil,
 	Window = nil,
 	WindowFrame = nil,
 	Utilities = {
@@ -125,7 +127,6 @@ local Library = {
 	UseAcrylic = false,
 	Acrylic = false,
 	Transparency = true,
-	MinimizeKeybind = nil,
 	MinimizeKey = Enum.KeyCode.LeftControl,
 
 	GUI = GUI
@@ -184,8 +185,8 @@ function Library.Utilities:Prettify(ToPrettify: EnumItem & string & number)
 	end
 end
 
-function Library.Utilities:Clone(...)
-	return Clone(...)
+function Library.Utilities:Clone(ToClone: {[any]: any} & ((...any) -> ...any) & Instance)
+	return Clone(ToClone)
 end
 
 local Elements = {}
@@ -240,8 +241,8 @@ function Library:CreateWindow(Config)
 		Size = Config.Size,
 		MinSize = Config.MinSize,
 		Title = Config.Title,
-		SubTitle = Config.SubTitle,
-		TabWidth = Config.TabWidth,
+		SubTitle = Config.SubTitle or "Made with Fluent Renewed",
+		TabWidth = Config.TabWidth or 160,
 	}
 
 	GUI.Name = `FluentRenewed_{Config.Title}`
@@ -256,9 +257,9 @@ function Library:AddWindow(Config)
 	return Library:CreateWindow(Config)
 end
 
-function Library:SetTheme(Value)
-	if Library.Window and table.find(Library.Themes, Value) then
-		Library.Theme = Value
+function Library:SetTheme(Name: string)
+	if Library.Window and table.find(Library.Themes, Name) then
+		Library.Theme = Name
 		Creator.UpdateTheme()
 	end
 end
