@@ -72,7 +72,7 @@ GUI.Parent = (function()
 
 	success, result = pcall(function()
 		local coreGui = game:GetService("CoreGui")
-		coreGui.Name = coreGui.Name
+		coreGui:GetFullName()
 		return coreGui
 	end)
 
