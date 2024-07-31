@@ -35,17 +35,23 @@ Library:Notify{
     Duration = 5 -- Set to nil to make the notification not disappear
 }
 
-Tabs.Main:CreateParagraph{
+local Paragraph = Tabs.Main:CreateParagraph("Paragraph", {
     Title = "Paragraph",
     Content = "This is a paragraph.\nSecond line!"
-}
+})
 
-Tabs.Main:AddParagraph{
+print(Paragraph.Value)
+
+Paragraph:SetValue("This paragraph text is changed!")
+
+print(Paragraph.Value)
+
+Tabs.Main:CreateParagraph("Aligned Paragraph", {
     Title = "Paragraph",
     Content = "This is a paragraph with a center alignment!",
     TitleAlignment = "Middle",
     ContentAlignment = Enum.TextXAlignment.Center
-}
+})
 
 Tabs.Main:CreateButton{
     Title = "Button",
