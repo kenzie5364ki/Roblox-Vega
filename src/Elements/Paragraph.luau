@@ -35,11 +35,8 @@ function Element:New(Idx, Config)
 		Value = Value or ""
 		Paragraph.Value = Value
 
-		ParagraphFrame = require(Components.Element)(Config.Title, Paragraph.Value, self.Container, false, {
-			TitleAlignment = Config.TitleAlignment == "Middle" and "Center" or Config.TitleAlignment,
-			DescriptionAlignment = Config.ContentAlignment == "Middle" and "Center" or Config.ContentAlignment
-		})
-	
+		ParagraphFrame:SetDesc(Value)
+
 		ParagraphFrame.Frame.BackgroundTransparency = 0.92
 		ParagraphFrame.Border.Transparency = 0.6
 
