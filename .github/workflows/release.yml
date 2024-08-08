@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version of this release (e.g. v1.0)'
+        required: true
+        default: 'v1.0'
+      summary:
+        description: 'Summary of this release'
+        required: true
+        default: 'Initial release'
+  push:
+    tags: ["v*"]
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ github.ref_name }} --draft --verify-tag --notes ${{ github.event.inputs.summary }} --title ${{ github.event.inputs.version }}
+
+  build-script:
+    needs: ["create-release"]
+    name: Bundle Hub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Aftman
+        uses: ok-nick/setup-aftman@v0.4.2
+
+      - name: Bundle
+        run: lune run Build
+
+      - name: Upload Minified Fluent to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.ref_name }} "Distribution/Fluent.luau"
+
+      - name: Upload Minified Fluent to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fluent.luau
+          path: Distribution/Fluent.luau
+      
+      - name: Upload Fluent Model to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.ref_name }} "Distribution/Fluent.rbxm"
+
+      - name: Upload Fluent Model to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fluent.rbxm
+          path: Distribution/Fluent.rbxm

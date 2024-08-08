@@ -388,9 +388,7 @@ function Element:New(Idx, Config)
 				if Enter then
 					pcall(function()
 						local Value = tonumber(AlphaInput.Input.Text)
-						if Value >= 0 and Value <= 100 then
-							Transparency = 1 - Value * 0.01
-						end
+						Transparency = Value >= 0 and Value <= 100 and 1 - Value * 0.01 or Transparency
 					end)
 				end
 				Display()
