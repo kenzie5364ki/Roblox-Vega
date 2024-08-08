@@ -17,7 +17,15 @@ function Element:New(Idx, Config)
 	local Library = self.Library
 
 	local Dropdown = {
-		Values = Config.Values,
+		Values = (function()
+			local Idxes = {}
+
+			for i,v in next, Config.Values do
+				Idxes[#Idxes + 1] = v
+			end
+
+			return Idxes
+		end)(),
 		Value = Config.Default,
 		Multi = Config.Multi,
 		Displayer = Config.Displayer or function(Value) return typeof(Value) ~= "number" and tostring(Library.Utilities:Prettify(Value)) or Value end,
