@@ -271,12 +271,12 @@ function Element:New(Idx, Config)
 		if Config.Multi then
 			for Idx, Value in next, Values do
 				if Dropdown.Value[Value] then
-					Str = `{Str}{Value}, `
+					Str = `{Str}{Dropdown.Displayer(Value)}, `
 				end
 			end
 			Str = Str:sub(1, #Str - 2)
 		else
-			Str = Dropdown.Value or ""
+			Str = Dropdown.Value and Dropdown.Displayer(Dropdown.Value) or ""
 		end
 
 		DropdownDisplay.Text = (Str == "" and "--" or Str)
@@ -437,7 +437,7 @@ function Element:New(Idx, Config)
 
 	function Dropdown:OnChanged(Func)
 		Dropdown.Changed = Func
-		Func(Dropdown.Value)
+		Library:SafeCallback(Func, Dropdown.Value, Dropdown.Value)
 	end
 
 	function Dropdown:SetValue(Val)

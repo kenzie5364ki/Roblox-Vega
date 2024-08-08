@@ -28,7 +28,7 @@ function Element:New(Idx, Config)
 
 	function Paragraph:OnChanged(Func)
 		Paragraph.Changed = Func
-		Func(Paragraph.Value)
+		Library:SafeCallback(Func, Paragraph.Value, Paragraph.Value)
 	end
 
 	function Paragraph:SetValue(Value)

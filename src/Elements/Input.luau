@@ -68,7 +68,7 @@ function Element:New(Idx, Config)
 
 	function Input:OnChanged(Func)
 		Input.Changed = Func
-		Func(Input.Value)
+		Library:SafeCallback(Func, Input.Value, Input.Value)
 	end
 
 	function Input:Destroy()

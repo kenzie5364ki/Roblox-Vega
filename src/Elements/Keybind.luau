@@ -116,7 +116,7 @@ function Element:New(Idx, Config)
 
 	function Keybind:OnChanged(Callback)
 		Keybind.Changed = Callback
-		Callback(Keybind.Value)
+		Library:SafeCallback(Callback, Keybind.Value, Keybind.Value)
 	end
 
 	function Keybind:DoClick()

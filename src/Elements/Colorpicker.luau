@@ -488,7 +488,7 @@ function Element:New(Idx, Config)
 
 	function Colorpicker:OnChanged(Func)
 		Colorpicker.Changed = Func
-		Func(Colorpicker.Value)
+		Library:SafeCallback(Func, Colorpicker.Value, Colorpicker.Value)
 	end
 
 	function Colorpicker:Destroy()

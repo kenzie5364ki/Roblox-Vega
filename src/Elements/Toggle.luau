@@ -62,7 +62,7 @@ function Element:New(Idx, Config)
 
 	function Toggle:OnChanged(Func)
 		Toggle.Changed = Func
-		Func(Toggle.Value)
+		Library:SafeCallback(Func, Toggle.Value, Toggle.Value)
 	end
 
 	function Toggle:SetValue(Value)
