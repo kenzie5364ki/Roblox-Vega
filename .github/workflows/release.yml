@@ -48,7 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.ref_name }} "Distribution/Fluent.luau"
+          gh release upload v${{ github.event.inputs.version }} "Distribution/Fluent.luau"
 
       - name: Upload Minified Fluent to Artifacts
         uses: actions/upload-artifact@v4
@@ -60,7 +60,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.ref_name }} "Distribution/Fluent.rbxm"
+          gh release upload v${{ github.event.inputs.version }} "Distribution/Fluent.rbxm"
 
       - name: Upload Fluent Model to Artifacts
         uses: actions/upload-artifact@v4
