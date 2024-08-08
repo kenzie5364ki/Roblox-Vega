@@ -24,7 +24,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create ${{ github.ref_name }} --draft --verify-tag --notes '${{ github.event.inputs.summary }}' --title '${{ github.event.inputs.version }}'
+          gh release create ${{ github.ref_name }} --draft --verify-tag --notes "${{ github.event.inputs.summary }}" --title "${{ github.event.inputs.version }}"
 
   build-script:
     needs: ["create-release"]
