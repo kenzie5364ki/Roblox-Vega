@@ -408,7 +408,7 @@ function Element:New(Idx, Config)
 
 			Buttons[Button] = Table
 
-			if Idx % 30 == 0 then
+			if Count % 30 == 0 then
 				task.wait()
 			end
 		end

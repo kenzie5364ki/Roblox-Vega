@@ -112,7 +112,7 @@ local Library = {
 
 	OnUnload = nil,
 	PostUnload = nil,
-	Window = nil,
+	CreatedWindow = nil,
 	WindowFrame = nil,
 	Utilities = {
 		Themes = Themes,
@@ -211,8 +211,8 @@ end
 
 Library.Elements = Elements
 
-function Library:CreateWindow(Config)
-	if Library.Window then
+function Library:Window(Config)
+	if Library.CreatedWindow then
 		return "You cannot create more than one window."
 	end
 
@@ -247,25 +247,29 @@ function Library:CreateWindow(Config)
 
 	GUI.Name = `FluentRenewed_{Config.Title}`
 
-	Library.Window = Window
+	Library.CreatedWindow = Window
 	Library:SetTheme(Config.Theme)
 
 	return Window
 end
 
 function Library:AddWindow(Config)
-	return Library:CreateWindow(Config)
+	return Library:Window(Config)
+end
+
+function Library:CreateWindow(Config)
+	return Library:Window(Config)
 end
 
 function Library:SetTheme(Name: string)
-	if Library.Window and table.find(Library.Themes, Name) then
+	if Library.CreatedWindow and table.find(Library.Themes, Name) then
 		Library.Theme = Name
 		Creator.UpdateTheme()
 	end
 end
 
 function Library:Destroy()
-	if Library.Window then
+	if Library.CreatedWindow then
 		Library.Unloaded = true
 		Library.Loaded = false
 
@@ -274,7 +278,7 @@ function Library:Destroy()
 		end
 
 		if Library.UseAcrylic then
-			Library.Window.AcrylicPaint.Model:Destroy()
+			Library.CreatedWindow.AcrylicPaint.Model:Destroy()
 		end
 
 		Creator.Disconnect()
@@ -341,10 +345,10 @@ function Library:Destroy()
 end
 
 function Library:ToggleAcrylic(Value)
-	if Library.Window then
+	if Library.CreatedWindow then
 		if Library.UseAcrylic then
 			Library.Acrylic = Value
-			Library.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
+			Library.CreatedWindow.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
 			if Value then
 				Acrylic.Enable()
 			else
@@ -355,8 +359,8 @@ function Library:ToggleAcrylic(Value)
 end
 
 function Library:ToggleTransparency(Value)
-	if Library.Window then
-		Library.Window.AcrylicPaint.Frame.Background.BackgroundTransparency = Value and 0.35 or 0
+	if Library.CreatedWindow then
+		Library.CreatedWindow.AcrylicPaint.Frame.Background.BackgroundTransparency = Value and 0.35 or 0
 	end
 end
 

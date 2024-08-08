@@ -389,12 +389,16 @@ return function(Config)
 
 	local TabModule = require(Components.Tab):Init(Window)
 
-	function Window:CreateTab(TabConfig)
+	function Window:Tab(TabConfig)
 		return TabModule:New(TabConfig.Title, TabConfig.Icon, Window.TabHolder)
 	end
 
 	function Window:AddTab(TabConfig)
-		return Window:CreateTab(TabConfig)
+		return Window:Tab(TabConfig)
+	end
+
+	function Window:CreateTab(TabConfig)
+		return Window:Tab(TabConfig)
 	end
 
 	function Window:SelectTab(Tab)

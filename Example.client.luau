@@ -1,6 +1,6 @@
-local Main = require(game:GetService("ReplicatedStorage"):WaitForChild("MainModule"))
+local Main = require(game:GetService("ReplicatedStorage"):WaitForChild("Fluent"):WaitForChild("MainModule"))
 
-local Window = Main:CreateWindow{
+local Window = Main:Window{
     Title = `Fluent {Main.Version}`,
     SubTitle = "by Actual Master Oogway",
     TabWidth = 160,
@@ -12,17 +12,17 @@ local Window = Main:CreateWindow{
 }
 
 local Tabs = {
-    Main = Window:CreateTab{
+    Main = Window:Tab{
         Title = "Main",
         Icon = "circle-user-round"
     },
-    Settings = Window:CreateTab{
+    Settings = Window:Tab{
         Title = "Settings",
         Icon = "settings"
     }
 }
 
-local Paragraph = Tabs.Main:CreateParagraph("Paragraph", {
+local Paragraph = Tabs.Main:Paragraph("Paragraph", {
     Title = "Paragraph",
     Content = "This is a paragraph.\nSecond line!"
 })
@@ -33,14 +33,14 @@ Paragraph:SetValue("This paragraph text is changed!")
 
 print(Paragraph.Value)
 
-Tabs.Main:CreateParagraph("Aligned Paragraph", {
+Tabs.Main:Paragraph("Aligned Paragraph", {
     Title = "Paragraph",
     Content = "This is a paragraph with a center alignment!",
     TitleAlignment = "Middle",
     ContentAlignment = Enum.TextXAlignment.Center
 })
 
-Tabs.Main:CreateButton({
+Tabs.Main:Button({
     Title = "Button",
     Description = "Very important button",
     Callback = function()
@@ -72,9 +72,9 @@ Tabs.Main:CreateButton({
     end
 })
 
-local Toggle = Tabs.Main:CreateToggle("Toggle", {Title = "Toggle", Default = false })
+local Toggle = Tabs.Main:Toggle("Toggle", {Title = "Toggle", Default = false })
 
-local Slider = Tabs.Main:CreateSlider("Slider", {
+local Slider = Tabs.Main:Slider("Slider", {
     Title = "Slider",
     Description = "This is a slider",
     Default = 2.0,
@@ -89,7 +89,7 @@ Slider.Value = 4.5
 
 print(Slider.Value)
 
-local Dropdown = Tabs.Main:CreateDropdown("Dropdown", {
+local Dropdown = Tabs.Main:Dropdown("Dropdown", {
     Title = "Dropdown",
     Values = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
     Multi = false,
@@ -105,7 +105,7 @@ Dropdown.Values = {"fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "t
 
 print(Dropdown.Value)
 
-local MultiDropdown = Tabs.Main:CreateDropdown("MultiDropdown", {
+local MultiDropdown = Tabs.Main:Dropdown("MultiDropdown", {
     Title = "Dropdown",
     Description = "You can select multiple values.",
     Values = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
@@ -119,7 +119,7 @@ MultiDropdown:SetValue({
     seven = false
 })
 
-local MultiInstanceDropdown = Tabs.Main:CreateDropdown("MultiInstanceDropdown", {
+local MultiInstanceDropdown = Tabs.Main:Dropdown("MultiInstanceDropdown", {
     Title = "Instance Dropdown",
     Description = "You can select multiple values and any instance or any other value!",
     Values = {workspace, 5, Enum.JoinSource, Enum.MarketplaceBulkPurchasePromptStatus.Error},
@@ -127,19 +127,47 @@ local MultiInstanceDropdown = Tabs.Main:CreateDropdown("MultiInstanceDropdown", 
     Default = {5},
 })
 
-local Colorpicker = Tabs.Main:CreateColorpicker("Colorpicker", {
+local MultiTableDropdown = Tabs.Main:Dropdown("MultiInstanceDropdown", {
+    Title = "Dropdown Displayer Function",
+    Description = "You can change what the name of the Value is when passing the Displayer Function!",
+    Values = {
+        {
+            Name = "Rawr 5",
+            Value = 5
+        },
+        {
+            Name = "Rawr 4",
+            Value = 4
+        },
+        {
+            Name = "Rawr 3",
+            Value = 3
+        },
+        {
+            Name = "Rawr 21",
+            Value = 21
+        }
+    },
+    Displayer = function(Val)
+        return Val.Name
+    end,
+    Multi = true,
+    Default = {}
+})
+
+local Colorpicker = Tabs.Main:Colorpicker("Colorpicker", {
     Title = "Colorpicker",
     Default = Color3.fromRGB(96, 205, 255)
 })
 
-local TColorpicker = Tabs.Main:CreateColorpicker("TransparencyColorpicker", {
+local TColorpicker = Tabs.Main:Colorpicker("TransparencyColorpicker", {
     Title = "Colorpicker",
     Description = "but you can change the transparency.",
     Transparency = 0,
     Default = Color3.fromRGB(96, 205, 255)
 })
 
-local Keybind = Tabs.Main:CreateKeybind("Keybind", {
+local Keybind = Tabs.Main:Keybind("Keybind", {
     Title = "KeyBind",
     Mode = "Hold",
     Default = "LeftControl",
@@ -148,7 +176,7 @@ local Keybind = Tabs.Main:CreateKeybind("Keybind", {
     end
 })
 
-local Input = Tabs.Main:CreateInput("Input", {
+local Input = Tabs.Main:Input("Input", {
     Title = "Input",
     Default = "Default",
     Numeric = false,
@@ -191,6 +219,16 @@ MultiInstanceDropdown:OnChanged(function(Value)
     print("Mutlidropdown with instance selection changed:", table.concat(Values, ", "))
 end)
 
+MultiTableDropdown:OnChanged(function(Value)
+    local Values = {}
+
+    for Value, State in next, Value do
+        table.insert(Values, Value)
+    end
+
+    print("Mutlidropdown table displayer thingy idk:", Values)
+end)
+
 Colorpicker:OnChanged(function()
     print("Colorpicker changed:", TColorpicker.Value)
 end)
@@ -202,7 +240,7 @@ TColorpicker:OnChanged(function()
     )
 end)
 
-Tabs.Main:CreateButton{
+Tabs.Main:Button{
     Title = "Really Really big Dropdown",
     Description = "",
     Callback = function()
@@ -212,7 +250,7 @@ Tabs.Main:CreateButton{
             Values[i] = i
         end
 
-        Tabs.Main:CreateDropdown("Dropdown", {
+        Tabs.Main:Dropdown("Dropdown", {
             Title = "Big Dropdown",
             Values = Values,
             Multi = false,
@@ -232,9 +270,9 @@ task.spawn(function()
     end
 end)
 
-local InterfaceSection = Tabs.Settings:CreateSection("Interface")
+local InterfaceSection = Tabs.Settings:Section("Interface")
 
-InterfaceSection:CreateDropdown("InterfaceTheme", {
+InterfaceSection:Dropdown("InterfaceTheme", {
     Title = "Theme",
     Description = "Changes the interface theme.",
     Values = Main.Themes,
@@ -245,7 +283,7 @@ InterfaceSection:CreateDropdown("InterfaceTheme", {
 })
 
 if Main.UseAcrylic then
-    InterfaceSection:CreateToggle("AcrylicToggle", {
+    InterfaceSection:Toggle("AcrylicToggle", {
         Title = "Acrylic",
         Description = "The blurred background requires graphic quality 8+",
         Default = Main.Acrylic,
@@ -255,7 +293,7 @@ if Main.UseAcrylic then
     })
 end
 
-InterfaceSection:CreateToggle("TransparentToggle", {
+InterfaceSection:Toggle("TransparentToggle", {
     Title = "Transparency",
     Description = "Makes the interface transparent.",
     Default = Main.Transparency,
@@ -264,7 +302,7 @@ InterfaceSection:CreateToggle("TransparentToggle", {
     end
 })
 
-InterfaceSection:CreateKeybind("MenuKeybind", { Title = "Minimize Bind", Default = "RightShift" })
+InterfaceSection:Keybind("MenuKeybind", { Title = "Minimize Bind", Default = "RightShift" })
 Main.MinimizeKeybind = Main.Options.MenuKeybind 
 
 Window:SelectTab(1)

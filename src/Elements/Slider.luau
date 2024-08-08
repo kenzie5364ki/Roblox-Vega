@@ -19,6 +19,7 @@ function Element:New(Idx, Config)
 		Max = Config.Max,
 		Rounding = typeof(Config.Rounding) == "number" and Config.Rounding or 0,
 		Callback = typeof(Config.Min) == "function" and Config.Callback or function(Value, OldValue) end,
+		Changed = Config.Changed or function() end,
 		Type = "Slider"
 	}
 
@@ -115,6 +116,23 @@ function Element:New(Idx, Config)
 		end
 	end)
 
+	function Slider:OnChanged(Func)
+		Slider.Changed = Func
+		Library:SafeCallback(Func, Slider.Value, Slider.Value)
+	end
+
+	function Slider:SetValue(Value)
+		local OldValue = self.Value or Value
+
+		self.Value = Library.Utilities:Round(math.clamp(Value, Slider.Min, Slider.Max), Slider.Rounding)
+		SliderDot.Position = UDim2.new((self.Value - Slider.Min) / (Slider.Max - Slider.Min), -7, 0.5, 0)
+		SliderFill.Size = UDim2.fromScale((self.Value - Slider.Min) / (Slider.Max - Slider.Min), 1)
+		SliderDisplay.Text = tostring(self.Value)
+
+		Library:SafeCallback(Slider.Callback, self.Value, OldValue)
+		Library:SafeCallback(Slider.Changed, self.Value, OldValue)
+	end
+
 	Creator.AddSignal(UserInputService.InputChanged, function(Input)
 		if
 			Dragging
@@ -132,23 +150,6 @@ function Element:New(Idx, Config)
 	Creator.AddSignal(SliderDisplay.FocusLost, function()
 		Slider:SetValue(tonumber(SliderDisplay.Text) or Slider.Value)
 	end)
-
-	function Slider:OnChanged(Func)
-		Slider.Changed = Func
-		Func(Slider.Value)
-	end
-
-	function Slider:SetValue(Value)
-		local OldValue = self.Value or Value
-
-		self.Value = Library.Utilities:Round(math.clamp(Value, Slider.Min, Slider.Max), Slider.Rounding)
-		SliderDot.Position = UDim2.new((self.Value - Slider.Min) / (Slider.Max - Slider.Min), -7, 0.5, 0)
-		SliderFill.Size = UDim2.fromScale((self.Value - Slider.Min) / (Slider.Max - Slider.Min), 1)
-		SliderDisplay.Text = tostring(self.Value)
-
-		Library:SafeCallback(Slider.Callback, self.Value, OldValue)
-		Library:SafeCallback(Slider.Changed, self.Value, OldValue)
-	end
 
 	function Slider:Destroy()
 		SliderFrame:Destroy()
