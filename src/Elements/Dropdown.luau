@@ -20,10 +20,12 @@ function Element:New(Idx, Config)
 		Values = Config.Values,
 		Value = Config.Default,
 		Multi = Config.Multi,
+		Displayer = Config.Displayer or function(Value) return typeof(Value) ~= "number" and tostring(Library.Utilities:Prettify(Value)) or Value end,
 		Buttons = {},
 		Opened = false,
 		Type = "Dropdown",
 		Callback = Config.Callback or function() end,
+		Changed = Config.Changed,
 	}
 
 	local DropdownFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, false)
@@ -398,7 +400,7 @@ function Element:New(Idx, Config)
 				end
 			end)
 
-			ButtonLabel.Text = typeof(Value) ~= "number" and tostring(Library.Utilities:Prettify(Value)) or Value
+			ButtonLabel.Text = Dropdown.Displayer(Value)
 			Button.Parent = DropdownScrollFrame
 
 			Table:UpdateButton()
