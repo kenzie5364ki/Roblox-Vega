@@ -20,20 +20,20 @@ function Element:New(Idx, Config)
 		Values = (function()
 			local Idxes = {}
 
-			for i,v in next, Config.Values do
+			for i,v in next, Config.Values or {} do
 				Idxes[#Idxes + 1] = v
 			end
 
 			return Idxes
 		end)(),
 		Value = Config.Default,
-		Multi = Config.Multi,
+		Multi = Config.Multi or false,
 		Displayer = Config.Displayer or function(Value) return typeof(Value) ~= "number" and tostring(Library.Utilities:Prettify(Value)) or Value end,
 		Buttons = {},
 		Opened = false,
 		Type = "Dropdown",
 		Callback = Config.Callback or function() end,
-		Changed = Config.Changed,
+		Changed = Config.Changed or function() end,
 	}
 
 	local DropdownFrame = require(Components.Element)(Config.Title, Config.Description, self.Container, false)
