@@ -141,7 +141,7 @@ return function(Config)
 	})
 
 	TitleBar.CloseButton = BarButton(Library.Utilities:GetIcon("Close"), UDim2.new(1, -4, 0, 4), TitleBar.Frame, 0, function()
-		Library.Window:Dialog{
+		Library.CreatedWindow:Dialog{
 			Title = "Close",
 			Content = "Are you sure you want to unload the interface?",
 			Buttons = {
